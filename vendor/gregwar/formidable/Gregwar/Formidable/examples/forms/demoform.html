@@ -1,0 +1,31 @@
+<form method="post" name="demo">
+    First name:<br />
+    <input type="text" name="firstname" mapping="firstname" required /><br />
+
+    Age:<br />
+    <input type="int" value="" name="age[test]" mapping="age" min="0" required /><br />
+
+    Test:
+    <input type="checkbox" name="chk[]" value="1"> 1<br />
+    <input type="checkbox" name="chk[]" value="2"> 2<br />
+    <input type="checkbox" name="chk[]" value="3"> 3<br />
+
+    E-mail :<br />
+    <input type="email" name="email" mapping="email" prettyname="e-mail address" /><br />
+
+    Gender:<br />
+    <label><input type="radio" name="gender" value="m" required mapping="gender" /> Homme</label><br />
+    <label><input type="radio" name="gender" value="f" /> Femme</label><br />
+
+    Birthday:<br />
+    <input type="date" name="date" mapping="birthday" /><br />
+
+    Photo:<br />
+    <input type="file" filetype="image" name="photo" /><br />
+
+    Choose some animals:<br />
+    <input type="multicheckbox" source="animals" required name="animals" mapping="animals" />
+
+    <hr />
+    <input type="submit" />
+</form>

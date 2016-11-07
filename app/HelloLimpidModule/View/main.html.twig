@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="{{ assets('backoffice/css/style.css') }}" rel="stylesheet" type="text/css">
+    <script src="{{ assets('backoffice/js/jquery-1.10.2.js') }}"></script>
+    <title>{% block page_title %}{% endblock %}</title>
+    {% block css %} {% endblock %}
+</head>
+<body>
+{#<h1>Hi There!</h1>#}
+{#<h2>Welcome to LightFrame Framework</h2>#}
+{#<div>You can extends this page and start working :)</div>#}
+{% block body %}{% endblock %}
+
+{% block js %}{% endblock %}
+</body>
+</html>

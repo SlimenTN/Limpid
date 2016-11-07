@@ -1,0 +1,76 @@
+{% extends 'main.html.twig' %}
+
+{% block page_title %}
+    Welcome
+{% endblock %}
+
+{% block css %}
+    <style>
+        .home-div {
+            text-align: center;
+            font-size: 80px;
+            margin-top: 5%;
+            font-family: 'Calibri';
+            font-weight: 100;
+
+        }
+
+        code{
+            color: green;
+        }
+
+        .commentaire{
+            color: grey;
+        }
+
+        .explanation{
+            margin: 0 auto;
+            width: 40%;
+            font-family: 'Calibri';
+            background: ghostwhite;
+            padding: 15px;
+            box-shadow: 0 0 2px #888888;
+            border-radius: 3px;
+        }
+
+        body{
+            background: #f2f2f2;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="home-div">
+        Welcome to <strong>LIMPID</strong>
+        <br>
+
+    </div>
+    <div class="explanation">
+        How do i create my first page? simple :)<br>
+        <ul>
+            <li>Go to <code>framework/config/AppRoutes.php</code></li>
+            <li>
+                Add your route, something like that:<br>
+                <code>
+                    $this->routes->addRoute(new Route(<br>
+                    'hello',<span class="commentaire">//-- Route name</span><br>
+                    '/',<span class="commentaire">//-- Route patten</span><br>
+                    'HelloLimpid_Default:hello'<span class="commentaire">//-- Target controller and command to execute (Module_Controller:command)</span><br>
+                    ));
+                </code>
+            </li>
+            <li>
+                Declare your command in your controller under <strong>YourModule/Controller</strong>:<br>
+                <code>
+                    public function helloCommand(){<span class="commentaire">//-- name of the command must end with "Command"</span><br>
+                    $this->paintView('HelloLimpid:hello.html.twig');<span class="commentaire">//-- Call "paintView" to display your view <strong>(YourModule:YourView)</strong></span><br>
+                    }<br>
+                </code>
+            </li>
+            <li>
+                Create your view under <strong>YourModule/View</strong>
+            </li>
+        </ul>
+        That's it ? yep that's it, enjoy :)
+    </div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{
+    "name": "gregwar/formidable",
+    "description": "Formidable, the pragmatic forms library",
+    "keywords": ["forms", "fields", "input", "html"],
+    "homepage": "https://gregwar.com/Formidable/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Grégoire Passault",
+            "email": "g.passault@gmail.com",
+            "homepage": "http://www.gregwar.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "gregwar/captcha": "1.0.*",
+        "gregwar/cache": "1.0.*",
+        "symfony/property-access": "2.*"
+    },
+    "target-dir": "Gregwar/Formidable",
+    "autoload": {
+        "psr-0": {
+            "Gregwar\\Formidable": ""
+        }
+    }
+}
