@@ -3,6 +3,7 @@ namespace framework\core\Controller;
 
 use framework\config\AppParamters;
 use framework\config\AppRoutes;
+use framework\core\Router\RoutesCollector;
 use framework\core\Router\URLParser;
 
 
@@ -47,9 +48,9 @@ class CrossRoadsRooter{
      */
     function __construct()
     {
-        $appRoutes = new AppRoutes();
+        $collector = new RoutesCollector();
+        $this->routes = $collector->getRoutes();
         $this->request = $this->findUserRequest();
-        $this->routes = $appRoutes->getRoutes();
     }
 
     /**
@@ -167,6 +168,15 @@ class CrossRoadsRooter{
      */
     public static function getTranslationBook($module){
         return include __DIR__.'/../../../app/'.$module.self::MODULE.'/Translator/book.php';
+    }
+
+    /**
+     * Get related routes of given module
+     * @param $module
+     * @return mixed
+     */
+    public static function getRoutesFiles($module){
+        return include __DIR__.'/../../../app/'.$module.self::MODULE.'/Config/routes.php';
     }
 
     /**
