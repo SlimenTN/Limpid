@@ -28,7 +28,7 @@ class AppRoutes{
      */
     public function prepeareRoutes(){
         $this->routes->addRoute(new Route(
-            'hello',
+            'helloqsdqsd',
             '/',
             'HelloLimpid_Default:hello'
         ));
