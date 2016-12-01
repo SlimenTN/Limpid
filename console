@@ -1,0 +1,11 @@
+<?php
+
+require_once('vendor/autoload.php');
+require_once 'Autoloader.php';
+
+Autoloader::register();
+
+use framework\core\Console\ConsoleLauncher;
+
+$console = new ConsoleLauncher();
+$console->launch();

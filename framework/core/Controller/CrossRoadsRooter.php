@@ -21,8 +21,10 @@ class CrossRoadsRooter{
     const REPOSITORY = 'Repository';
     const ENTITY = 'Entity';
     const COMMAND = 'Command';
+    const VIEW = 'View';
     const FORM_DIRECTORY = 'FormPrototype';
     const FORM = 'Form';
+    const CONFIG = 'Config';
     
     public static $LANG = AppParamters::DEFAULT_LANG;
     
@@ -74,10 +76,11 @@ class CrossRoadsRooter{
             if(AppParamters::PAGE_NOT_FOUND_ROUTE != ''){
                 self::redirectToRoute(AppParamters::PAGE_NOT_FOUND_ROUTE);
             }else{
-                header('HTTP/1.0 404 Not Found');
-                echo "<h1>404 Not Found</h1>";
-                echo "The page that you have requested could not be found.";
-                exit;
+//                header('HTTP/1.0 404 Not Found');
+//                echo "<h1>404 Not Found</h1>";
+//                echo "The page that you have requested could not be found.";
+//                exit;
+                throw new \Exception('No route found for the url "'.$this->request.'". Please check your routes!');
             }
 
         }

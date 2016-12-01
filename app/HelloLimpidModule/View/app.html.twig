@@ -48,28 +48,9 @@
     <div class="explanation">
         How do i create my first page? simple :)<br>
         <ul>
-            <li>Go to <code>framework/config/AppRoutes.php</code></li>
-            <li>
-                Add your route, something like that:<br>
-                <code>
-                    $this->routes->addRoute(new Route(<br>
-                    'hello',<span class="commentaire">//-- Route name</span><br>
-                    '/',<span class="commentaire">//-- Route patten</span><br>
-                    'HelloLimpid_Default:hello'<span class="commentaire">//-- Target controller and command to execute (Module_Controller:command)</span><br>
-                    ));
-                </code>
-            </li>
-            <li>
-                Declare your command in your controller under <strong>YourModule/Controller</strong>:<br>
-                <code>
-                    public function helloCommand(){<span class="commentaire">//-- name of the command must end with "Command"</span><br>
-                    $this->paintView('HelloLimpid:hello.html.twig');<span class="commentaire">//-- Call "paintView" to display your view <strong>(YourModule:YourView)</strong></span><br>
-                    }<br>
-                </code>
-            </li>
-            <li>
-                Create your view under <strong>YourModule/View</strong>
-            </li>
+            <li>Open <code>CMD console</code></li>
+            <li>Write this command <code>php console launch:module YourModuleName (ex: Backoffice)</code></li>
+            <li>Press <code>Enter</code> and Limpid will do the work for you</li>
         </ul>
         That's it ? yep that's it, enjoy :)
     </div>

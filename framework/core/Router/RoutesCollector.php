@@ -27,7 +27,7 @@ class RoutesCollector
      * Collect routes from modules
      */
     private function collect(){
-        $table = include __DIR__.'/../../config/modules_routes.php';
+        $table = include __DIR__.'/../../config/router.php';
         foreach ($table as $modulePointer){
             
             if(!array_key_exists('module', $modulePointer) || !array_key_exists('prefix', $modulePointer)){
