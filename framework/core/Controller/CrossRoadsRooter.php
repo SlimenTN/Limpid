@@ -2,7 +2,6 @@
 namespace framework\core\Controller;
 
 use framework\config\AppParamters;
-use framework\config\AppRoutes;
 use framework\core\Router\RoutesCollector;
 use framework\core\Router\URLParser;
 
@@ -190,7 +189,7 @@ class CrossRoadsRooter{
      * @throws \Exception
      */
     public static function getURLOfRoute($routeName, $params = array()){
-        $routes = new AppRoutes();
+        $routes = new RoutesCollector();
         $url = null;
         foreach ($routes->getRoutes()->getRoutes() as $route){
             if($route->getName() === $routeName){
