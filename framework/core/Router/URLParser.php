@@ -3,7 +3,6 @@
 namespace framework\core\Router;
 
 use framework\config\AppParamters;
-use framework\config\AppRoutes;
 use framework\core\Controller\CrossRoadsRooter;
 
 /**

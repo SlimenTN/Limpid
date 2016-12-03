@@ -3,8 +3,8 @@
 namespace framework\core\Twig\LimpidExtensions;
 
 use framework\config\AppParamters;
-use framework\config\AppRoutes;
 use framework\core\Controller\CrossRoadsRooter;
+use framework\core\Router\RoutesCollector;
 use framework\core\Twig\TwigCustomExtension;
 
 /**
@@ -26,7 +26,7 @@ class RouteConverterExtension implements TwigCustomExtension
 
     public function buildURL($routeName, $params = array())
     {
-        $routes = new AppRoutes();
+        $routes = new RoutesCollector();
         $url = null;
         foreach ($routes->getRoutes()->getRoutes() as $route) {
             if ($route->getName() === $routeName) {
