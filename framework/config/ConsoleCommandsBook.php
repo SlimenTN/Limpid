@@ -13,6 +13,10 @@ class ConsoleCommandsBook
          * Limpid's commands-------------------
          */
         'framework\core\Console\Commands\LaunchModuleCommand',
+        'framework\core\Console\Commands\GenerateEntityCommand',
+        'framework\core\Console\Commands\UpdateDatabaseCommand',
+        'framework\core\Console\Commands\DebugRoutesCommand',
+        'framework\core\Console\Commands\GenerateFormCommand',
 
         /**
          * You can add your commands here--------------

@@ -31,7 +31,7 @@ class LaunchModuleCommand extends Command
     {
         $this
             // the name of the command (the part after "bin/console")
-            ->setName('launch:module')
+            ->setName('create:module')
 
             // the short description shown while running "php bin/console list"
             ->setDescription('Creates new module.')
@@ -47,7 +47,7 @@ class LaunchModuleCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->moduleName = $input->getArgument('module_name');
-        $this->fullModuleName = $input->getArgument('module_name').CrossRoadsRooter::MODULE;
+        $this->fullModuleName = $this->moduleName.CrossRoadsRooter::MODULE;
 
         // outputs multiple lines to the console (adding "\n" at the end of each line)
         $output->writeln([
@@ -126,10 +126,11 @@ class LaunchModuleCommand extends Command
     
     Your '.$this->fullModuleName.' is ready :)<br><br>
     Limpid provides you a bunch of commands that helps you accelerate your work:<br>
-    <code>php console launch:module</code>: Helps you generate your module quickly.<br>
-    <code>php console generate:entity</code>: Helps you generate an entity with it\'s repository based on Doctrine annotations.<br>
-    <code>php console generate:form</code>: Create a form prototype based on the entity\'s attributes.<br>
-    <code>php console generate:crud</code>: Helps you generate the base methods of entities (Create, Read, Delete and Update) with their views
+    <code>php console create:module</code>: Helps you generate your module quickly.<br>
+    <code>php console create:entity</code>: Helps you generate an entity with it\'s repository based on Doctrine annotations.<br>
+    <code>php console create:form</code>: Create a form prototype based on the entity\'s attributes.<br>
+    <code>php console update:schema</code>: Update database schema<br>
+    <code>php console debug:routes</code>: List all available routes of your application
     
     <!--Your pages goes here-->
     {% block body %}{% endblock %}

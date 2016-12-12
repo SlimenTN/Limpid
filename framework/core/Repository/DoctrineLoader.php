@@ -2,11 +2,15 @@
 
 namespace framework\core\Repository;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\ClassLoader,
     Doctrine\ORM\Configuration,
     Doctrine\ORM\EntityManager,
     Doctrine\Common\Cache\ArrayCache,
     Doctrine\DBAL\Logging\EchoSQLLogger;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\Tools\Setup;
 use framework\config\AppParamters;
 
 /**
@@ -34,7 +38,10 @@ class DoctrineLoader{
         $config = new Configuration;
         $cache = new ArrayCache;
         $config->setMetadataCacheImpl($cache);
-        $driverImpl = $config->newDefaultAnnotationDriver(array('/models/Entities'));
+//        $driverImpl = $config->newDefaultAnnotationDriver(array(), false);//make sure to use
+        $driverImpl = new AnnotationDriver(new AnnotationReader());
+        // registering noop annotation autoloader - allow all annotations by default
+        AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driverImpl);
         $config->setQueryCacheImpl($cache);
 
@@ -46,7 +53,7 @@ class DoctrineLoader{
 
         // Set up logger
         $logger = new EchoSQLLogger;
-        //$config->setSQLLogger($logger);
+//        $config->setSQLLogger($logger);
 
         $config->setAutoGenerateProxyClasses(TRUE);
 

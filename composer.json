@@ -16,5 +16,11 @@
         "php-di/php-di": "^5.4",
         "gregwar/formidable": "^1.0",
         "phpmailer/phpmailer": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "framework\\": "framework/",
+            "app\\": "app/"
+        }
     }
 }
