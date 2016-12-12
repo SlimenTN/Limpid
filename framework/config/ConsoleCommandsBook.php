@@ -17,6 +17,8 @@ class ConsoleCommandsBook
         'framework\core\Console\Commands\UpdateDatabaseCommand',
         'framework\core\Console\Commands\DebugRoutesCommand',
         'framework\core\Console\Commands\GenerateFormCommand',
+        'framework\core\Console\Commands\CreateSchemaCommand',
+        'framework\core\Console\Commands\CreateTranslatorCommand',
 
         /**
          * You can add your commands here--------------
