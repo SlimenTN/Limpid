@@ -14,7 +14,7 @@ use framework\core\Router\URLParser;
  * @author Arnaout Slimen <arnaout.slimen@sbc.tn>
  */
 class CrossRoadsRooter{
-    
+
     const MODULE = 'Module';
     const CONTROLLER = 'Controller';
     const REPOSITORY = 'Repository';
@@ -24,15 +24,16 @@ class CrossRoadsRooter{
     const FORM_DIRECTORY = 'FormPrototype';
     const FORM = 'Form';
     const CONFIG = 'Config';
-    
+    const TRANSLATOR = 'Translator';
+
     public static $LANG = AppParamters::DEFAULT_LANG;
-    
+
     public static $CURRENT_ROUTE = '';
     /**
      * @var array
      */
     private $routes;
-    
+
     /**
      * @var string
      */
@@ -42,7 +43,7 @@ class CrossRoadsRooter{
      * @var array
      */
     private $commandToExecute;
-    
+
     /**
      * CrossRoadsRooter constructor.
      * @param array $root
@@ -60,7 +61,7 @@ class CrossRoadsRooter{
     private function findUserRequest(){
         $serverDir = (dirname($_SERVER['PHP_SELF']) == '/') ? '' : dirname($_SERVER['PHP_SELF']);
         $request =  str_replace($serverDir, '', str_replace('%20', ' ', $_SERVER['REQUEST_URI']));
-       return $request;
+        return $request;
     }
 
     /**
@@ -72,16 +73,7 @@ class CrossRoadsRooter{
             self::$CURRENT_ROUTE = $this->commandToExecute['route_name'];
             $this->executeURLCommand();
         }else{
-            if(AppParamters::PAGE_NOT_FOUND_ROUTE != ''){
-                self::redirectToRoute(AppParamters::PAGE_NOT_FOUND_ROUTE);
-            }else{
-//                header('HTTP/1.0 404 Not Found');
-//                echo "<h1>404 Not Found</h1>";
-//                echo "The page that you have requested could not be found.";
-//                exit;
-                throw new \Exception('No route found for the url "'.$this->request.'". Please check your routes!');
-            }
-
+            throw new \Exception('No route found for the url "'.$this->request.'". Please check your routes!');
         }
     }
 
@@ -125,7 +117,12 @@ class CrossRoadsRooter{
      */
     private function executeCommande($controllerClass, $commandName){
         $controller = new $controllerClass();
-        call_user_func_array(array($controller, $commandName), $this->commandToExecute['parameters']);
+        if(method_exists($controller, $commandName)){
+            call_user_func_array(array($controller, $commandName), $this->commandToExecute['parameters']);
+        }else{
+            throw new \Exception('Error: the command '.$commandName.' is not defined in the controller '.$controllerClass.'!');
+        }
+
     }
 
     /**
@@ -169,7 +166,7 @@ class CrossRoadsRooter{
      * @return mixed
      */
     public static function getTranslationBook($module){
-        return include __DIR__.'/../../../app/'.$module.self::MODULE.'/Translator/book.php';
+        return include __DIR__.'/../../../app/'.$module.self::MODULE.'/'.CrossRoadsRooter::TRANSLATOR.'/book.php';
     }
 
     /**
@@ -178,7 +175,7 @@ class CrossRoadsRooter{
      * @return mixed
      */
     public static function getRoutesFiles($module){
-        return include __DIR__.'/../../../app/'.$module.self::MODULE.'/Config/routes.php';
+        return include __DIR__.'/../../../app/'.$module.self::MODULE.'/'.self::CONFIG.'/routes.php';
     }
 
     /**
@@ -208,7 +205,7 @@ class CrossRoadsRooter{
                 }
             }
         }
-        
+
         if($url == null) throw new \Exception('Exception in '.__METHOD__.'(): We can\'t find a declared route with the name "'.$routeName.'" ');
 
         if (AppParamters::TRANSLATOR_ENABLED) $url = '/' . CrossRoadsRooter::$LANG . $url;

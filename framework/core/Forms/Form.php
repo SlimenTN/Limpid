@@ -1,23 +1,28 @@
 <?php
 namespace framework\core\Forms;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use framework\core\Controller\GlobalContainer;
-use framework\core\Forms\FormElements\Label;
-use framework\core\Request\ParametersHandler;
-use Gregwar\Formidable\Fields\DateField;
-use Gregwar\Formidable\Fields\Field;
-use Gregwar\Formidable\Fields\FileField;
-use Gregwar\Formidable\Fields\HiddenField;
-use Gregwar\Formidable\Fields\Option;
-use Gregwar\Formidable\Fields\Select;
-use Gregwar\Formidable\Fields\Textarea;
-use Gregwar\Formidable\Fields\TextField;
+use framework\core\Forms\FormElements\CheckboxField;
+use framework\core\Forms\FormElements\DateField;
+use framework\core\Forms\FormElements\Field;
+use framework\core\Forms\FormElements\FileField;
+use framework\core\Forms\FormElements\HiddenField;
+use framework\core\Forms\FormElements\MulticheckboxField;
+use framework\core\Forms\FormElements\MultiradioField;
+use framework\core\Forms\FormElements\NumberField;
+use framework\core\Forms\FormElements\Option;
+use framework\core\Forms\FormElements\RadioField;
+use framework\core\Forms\FormElements\Select;
+use framework\core\Forms\FormElements\Textarea;
+use framework\core\Forms\FormElements\TextField;
+use framework\core\Request\HTTPHandler;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Class Form
+ * Build and handle form view based on given FormPrototype and object
  * @package framework\core\Forms
  *
  * @author Arnaout Slimen <arnaout.slimen@sbc.tn>
@@ -29,6 +34,8 @@ class Form
         'int',
         'integer',
         'bool',
+        'date',
+        '\DateTime',
         'boolean',
         'FileField',
         'ArrayCollection',
@@ -129,6 +136,10 @@ class Form
             case 'select':
                 $field = new Select();
                 $field->setName($n);
+                foreach ($input->getOptions() as $option => $value){
+                    if($input->isInputAttribute($option))
+                        $field->push($option, $value);
+                }
                 $this->buildSelectOptions($field, $input, $o);
                 break;
             case 'file':
@@ -139,6 +150,37 @@ class Form
                 $field = new DateField();
                 $field->setName($n);
                 $field->setValue($this->accessor->getValue($o, $input->getName()));
+                break;
+            case 'numeric':
+                $field = new NumberField();
+                $field->setName($n);
+                $field->setValue($this->accessor->getValue($o, $input->getName()));
+                break;
+            case 'checkbox':
+                $field = new CheckboxField();
+                $field->setName($n);
+                $field->setValue($this->accessor->getValue($o, $input->getName()));
+                break;
+            case 'multi-checkbox':
+                $field = new MulticheckboxField();
+                $field->setName($n);
+                $data = array('10' => 'Piscine', '20' => 'Garage', '25' => 'Jardin');
+                $field->source($data);
+                $v = array('20' => 'Garage', '25' => 'Jardin');
+                $field->setValue($v);
+
+                break;
+            case 'radio':
+                $field = new RadioField();
+                $field->setName($n);
+                $field->setValue($this->accessor->getValue($o, $input->getName()));
+                break;
+            case 'multi-radio':
+                $field = new MultiradioField();
+                $field->setName($n);
+                $data = array('NON' => 'Non', 'OUI' => 'Oui');
+                $field->source($data);
+//                $field->setValue($this->accessor->getValue($o, $input->getName()));
                 break;
             case 'collection':
                 $entities = $this->accessor->getValue($o, $input->getName());
@@ -165,7 +207,6 @@ class Form
         $subInputs = $form->buildFormPrototype(new FormBuilder())->getInputs();
         foreach ($entities as $entity) {
             $subWidgets = array();
-//            var_dump($entity);
             $hiddenId = new HiddenField();
             $hiddenId->setName($parentName.'['.$counter.'][id]');
             $hiddenId->setValue($this->accessor->getValue($entity, 'id'));
@@ -201,20 +242,49 @@ class Form
                 $field->addOption($op);
             }
         } else if (array_key_exists('target_entity', $input->getOptions())) {
-            $entity = $this->container->getEntityNamespace($input->getOptions()['target_entity']);
-            $list = $this->container->getEntityManager()->getRepository($entity)->findAll();
-            foreach ($list as $item) {
-                $op = new Option();
-                $op->setValue($item->getId());
-                $op->setLabel($item->__toString());
-                if ($this->accessor->getValue($object, $input->getName()) != null && $this->accessor->getValue($object, $input->getName() . '.id') == $item->getId())
+            if(array_key_exists('ajax', $input->getOptions()) && $input->getOptions()['ajax']){
+                $objectCollection = $this->accessor->getValue($object, $input->getName());
+                foreach ($objectCollection as $entity){
+                    $op = new Option();
+                    $op->setValue($entity->getId());
+                    $op->setLabel($entity->__toString());
                     $op->push('selected');
-                $field->addOption($op);
+                    $field->addOption($op);
+                }
+            }else{
+                $entity = $this->container->getEntityNamespace($input->getOptions()['target_entity']);
+                $listFull = $this->container->getEntityManager()->getRepository($entity)->findAll();
+                $objectCollection = $this->accessor->getValue($object, $input->getName());
+                foreach ($listFull as $item) {
+                    $op = new Option();
+                    $op->setValue($item->getId());
+                    $op->setLabel($item->__toString());
+                    if($this->typeOf($input->getName()) == 'ArrayCollection'){
+                        if($this->idExistInEntities($item->getId(), $objectCollection))
+                            $op->push('selected');
+                    }else{
+                        if ($this->accessor->getValue($object, $input->getName()) != null && $this->accessor->getValue($object, $input->getName() . '.id') == $item->getId())
+                            $op->push('selected');
+                    }
+
+                    $field->addOption($op);
+                }
             }
+
         }
     }
 
-
+    /**
+     * @param $id
+     * @param Collection $collection
+     * @return bool
+     */
+    private function idExistInEntities($id, Collection $collection){
+        foreach ($collection as $entity){
+            if($entity->getId() == $id) return true;
+        }
+        return false;
+    }
 
     /**
      * @param GlobalContainer $container
@@ -297,7 +367,7 @@ class Form
     public function isPosted()
     {
 
-       $res = ParametersHandler::handle();
+        $res = $this->container->getHttpHandler()->get(HTTPHandler::POST);
 
         if(!empty($res)){
 //            var_dump($res);
@@ -306,6 +376,14 @@ class Form
         }else{
             return false;
         }
+    }
+
+    /**
+     * Get related object filled with data
+     * @return object
+     */
+    public function getObject(){
+        return $this->object;
     }
 
     /**
@@ -321,51 +399,139 @@ class Form
      * Handle the form's request and fill given object
      */
     private function handleRequest(array $data){
-
+        $this->handlerUnsentAttributes($data);
         foreach ($data as $key => $value) {
-            
             if ($this->isCustomObject($key)) {//----if it's custom object create instance of it
                 $entity = $this->container->getEntityManager()->getRepository($this->getTargetEntity($key))->find($value);
                 $this->accessor->setValue($this->object, $key, $entity);
 
             } else if ($this->typeOf($key) == 'ArrayCollection') {//---if it's doctrine's ArrayCollection type
                 $collection = $this->accessor->getValue($this->object, $key);
+                $inputForm = $this->inputFormType($key);
+                if($inputForm->getType() == 'collection'){
+                    $objectsToRemove = $this->collectRemovedObject($collection, $value);
 
-                $objectsToRemove = $this->collectRemovedObject($collection, $value);
+                    $counter = 0;
 
-                $counter = 0;
-                foreach ($value as $k => $v) {
-                    $c = null;
-                    if(array_key_exists('id', $v) && $v['id'] != ''){
-                        foreach ($collection as $en){
-                            if($v['id'] == $en->getId()){
-                                $c = $en;
+                    foreach ($value as $k => $v) {
+                        $c = null;
+                        if(array_key_exists('id', $v) && $v['id'] != ''){
+                            foreach ($collection as $en){
+                                if($v['id'] == $en->getId()){
+                                    $c = $en;
+                                }
                             }
+                        }else{
+                            $class = $this->getTargetEntity($key);
+                            $c = new $class();
+                            $collection->set($counter, $c);//---update or add it
                         }
-                    }else{
-                        $class = $this->getTargetEntity($key);
-                        $c = new $class();
-                        $collection->set($counter, $c);//---update or add it
-                    }
-                    foreach ($v as $sk => $sv) {//---fill entity
-//                        var_dump('$sk: '.$sk);
-                        $this->accessor->setValue($c, $sk, $sv);
+                        foreach ($v as $sk => $sv) {//---fill entity
+                            $this->accessor->setValue($c, $sk, $sv);
+                        }
+
+                        $counter++;
                     }
 
-                    $counter++;
+                    foreach ($objectsToRemove as $or){
+                        $collection->removeElement($or);
+                    }
+                }else{
+
+                    $entitiesToRemove = $this->entitiesToRemove($collection, $value);
+                    $counter = 0;
+                    foreach ($value as $id){
+                        $entity = $this->getEntityById($collection, $id);
+                        if($entity == null){
+                            $namespace = $this->container->getEntityNamespace($inputForm->getOptions()['target_entity']);
+                            $entity = $this->container->getEntityManager()->getRepository($namespace)->find($id);
+                            $collection->set($counter, $entity);
+                        }
+                        $counter++;
+                    }
+
+                    foreach ($entitiesToRemove as $e){
+                        $collection->removeElement($e);
+                    }
                 }
 
-                foreach ($objectsToRemove as $or){
-                    $collection->removeElement($or);
-                }
-
-            } else {///----else if it's a simple type just push it to the object
+            }else if($this->typeOf($key) == '\DateTime'){
+                $date = new \DateTime($value['year'].'-'.$value['month'].'-'.$value['day']);
+                $this->accessor->setValue($this->object, $key, $date);
+            }else {///----else if it's a simple type just push it to the object
                 $this->accessor->setValue($this->object, $key, $value);
             }
 
         }
     }
 
+    /**
+     * Handle unsent attributes
+     * @param array $httpData
+     */
+    private function handlerUnsentAttributes(array $httpData){
+        $unsentAttributes = $this->getUnsentAttributes($httpData);
+        foreach ($unsentAttributes as $attribute){
+            $type = $this->typeOf($attribute);
+            if($type == 'bool' || $type == 'boolean'){
+                $this->accessor->setValue($this->object, $attribute, false);
+            }else if($type == 'ArrayCollection'){
+                $collection = $this->accessor->getValue($this->object, $attribute);
+                $collection->clear();
+            }
+        }
+    }
+
+    /**
+     * Get unsent attributes (declared in the form builder but not sent)
+     * @param array $httpData
+     * @return array
+     */
+    private function getUnsentAttributes(array $httpData){
+        $unsentAttributes = array();
+        foreach ($this->inputs as $input){
+            $attr = $input->getName();
+            if(!array_key_exists($attr, $httpData)) $unsentAttributes[] = $attr;
+        }
+        return $unsentAttributes;
+    }
+
+    /**
+     * @param Collection $collection
+     * @param int $id
+     */
+    private function getEntityById(Collection $collection, $id){
+        foreach ($collection as $entity){
+            if($entity->getId() == $id) return $entity;
+        }
+        return null;
+    }
+
+    /**
+     * Collect entities to remove
+     * @param Collection $collection
+     * @param array $ids
+     * @return array
+     */
+    private function entitiesToRemove(Collection $collection, array $ids){
+        $entitiesToRemove = array();
+        foreach ($collection as $item){
+            if(!in_array($item->getId(), $ids)) $entitiesToRemove[] = $item;
+        }
+        return $entitiesToRemove;
+    }
+
+    /**
+     * Get form builder type for given attribute
+     * @param $attr
+     * @return FormInput|null
+     */
+    private function inputFormType($attr){
+        foreach ($this->inputs as $input){
+            if($input->getName() == $attr) return $input;
+        }
+        return null;
+    }
     /**
      * @param $collection
      * @param $value
@@ -396,6 +562,7 @@ class Form
      */
     private function getTargetEntity($attr)
     {
+//        var_dump($attr);
         $entity = null;
         foreach ($this->inputs as $input) {
             if ($input->getName() == $attr) {
@@ -449,7 +616,8 @@ class Form
      */
     public function guessLabel($name)
     {
-        return ucfirst($name);
+        $label = $this->inputFormType($name)->getLabel();
+        return ($label == null) ? ucfirst($name) : $label;
     }
 
     /**

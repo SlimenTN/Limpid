@@ -1,33 +1,47 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Slimen-PC
- * Date: 02/11/2016
- * Time: 13:45
- */
-
 namespace framework\core\Request;
-
-
-use Gregwar\Formidable\Fields\FileField;
+use framework\core\Forms\FormElements\FileField;
 
 /**
- * Class ParametersHandler
+ * Class HTTPHandler
+ * Handle sent post or get data
  * @package framework\core\Request
  * 
- * @author Arnaout Slimen <arnaout.slimen@sbc.tn>
+ * Arnaout Slimen <arnaout.slimen@sbc.tn>
  */
-class ParametersHandler
+class HTTPHandler
 {
+    const POST = 'POST';
+    const GET = 'GET';
+    
     /**
-     * Handel send parameters $_POST or $_GET
-     * @return array
-     * @throws \Exception
+     * @var array
      */
-    public static function handle(){
-        $res = array();
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    private $get;
 
+    /**
+     * @var array
+     */
+    private $post;
+
+    function __construct()
+    {
+        $this->builGetArray();
+        $this->buildPostArray();
+    }
+
+    /**
+     * 
+     */
+    private function builGetArray(){
+        $this->get = ($_SERVER['REQUEST_METHOD'] == self::GET) ? $_GET : null;
+    }
+
+    /**
+     * 
+     */
+    private function buildPostArray(){
+        if ($_SERVER['REQUEST_METHOD'] == self::POST) {
             $files = array();
             foreach ($_FILES as $index => $file) {
                 $f = null;
@@ -55,16 +69,11 @@ class ParametersHandler
                     $files[$index] = $d;
                 }
             }
-            
-            $res = self::array_merge_recursive_ex($_POST, $files);
 
-        }else if($_SERVER['REQUEST_METHOD'] == 'GET'){
-            $res = $_GET;
+            $this->post = self::array_merge_recursive_ex($_POST, $files);
         }else{
-            throw new \Exception('No parameters to handle.');
+            $this->post = null;
         }
-
-        return $res;
     }
 
     /**
@@ -93,5 +102,24 @@ class ParametersHandler
         }
 
         return $merged;
+    }
+
+    /**
+     * @param $request
+     * @return array
+     * @throws \Exception
+     */
+    public function get($request){
+        switch ($request){
+            case self::GET:
+                return $this->get;
+                break;
+            case self::POST:
+                return $this->post;
+                break;
+            default:
+                throw new \Exception('Unknown request "'.$request.'"! Available requests are "'.self::GET.'" or "'.self::POST.'".');
+                break;
+        }    
     }
 }

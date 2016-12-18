@@ -8,6 +8,8 @@ class ComposerStaticInit695c343b44c35468c3c2d02d13fa5f60
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
+        '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
         'bbf73f3db644d3dced353b837903e74c' => __DIR__ . '/..' . '/php-di/php-di/src/DI/functions.php',
     );
 
@@ -22,8 +24,10 @@ class ComposerStaticInit695c343b44c35468c3c2d02d13fa5f60
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Php70\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\PropertyAccess\\' => 33,
+            'Symfony\\Component\\Inflector\\' => 28,
             'Symfony\\Component\\Debug\\' => 24,
             'Symfony\\Component\\Console\\' => 26,
         ),
@@ -36,10 +40,6 @@ class ComposerStaticInit695c343b44c35468c3c2d02d13fa5f60
         array (
             'Invoker\\' => 8,
             'Interop\\Container\\' => 18,
-        ),
-        'G' => 
-        array (
-            'Gregwar\\Captcha\\' => 16,
         ),
         'D' => 
         array (
@@ -59,6 +59,10 @@ class ComposerStaticInit695c343b44c35468c3c2d02d13fa5f60
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
+        'Symfony\\Polyfill\\Php70\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php70',
+        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
@@ -66,6 +70,10 @@ class ComposerStaticInit695c343b44c35468c3c2d02d13fa5f60
         'Symfony\\Component\\PropertyAccess\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/property-access',
+        ),
+        'Symfony\\Component\\Inflector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/inflector',
         ),
         'Symfony\\Component\\Debug\\' => 
         array (
@@ -91,10 +99,6 @@ class ComposerStaticInit695c343b44c35468c3c2d02d13fa5f60
         array (
             0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
         ),
-        'Gregwar\\Captcha\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/gregwar/captcha',
-        ),
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
@@ -119,17 +123,6 @@ class ComposerStaticInit695c343b44c35468c3c2d02d13fa5f60
             'Twig_' => 
             array (
                 0 => __DIR__ . '/..' . '/twig/twig/lib',
-            ),
-        ),
-        'G' => 
-        array (
-            'Gregwar\\Formidable' => 
-            array (
-                0 => __DIR__ . '/..' . '/gregwar/formidable',
-            ),
-            'Gregwar\\Cache' => 
-            array (
-                0 => __DIR__ . '/..' . '/gregwar/cache',
             ),
         ),
         'D' => 
@@ -162,12 +155,18 @@ class ComposerStaticInit695c343b44c35468c3c2d02d13fa5f60
     );
 
     public static $classMap = array (
+        'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
+        'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
+        'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
         'EasyPeasyICS' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
+        'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
         'PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
         'PHPMailerOAuth' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauth.php',
         'PHPMailerOAuthGoogle' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauthgoogle.php',
         'POP3' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.pop3.php',
+        'ParseError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ParseError.php',
         'SMTP' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.smtp.php',
+        'TypeError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/TypeError.php',
         'ntlm_sasl_client_class' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
         'phpmailerException' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
     );

@@ -9,7 +9,7 @@ use framework\core\Forms\FormBuilder;
 use framework\core\Forms\FormBuilderInterface;
 use framework\core\PHPMailer\MailerLauncher;
 use framework\core\Repository\DoctrineLoader;
-use framework\core\Request\ParametersHandler;
+use framework\core\Request\HTTPHandler;
 use framework\core\Twig\TwigLauncher;
 
 /**
@@ -36,6 +36,14 @@ class GlobalContainer
     {
         $this->container = ContainerBuilder::buildDevContainer();
         $this->twigLauncher = $this->container->get('framework\core\Twig\TwigLauncher');//----Inject TwigLauncher dependency
+    }
+
+    /**
+     * @return HTTPHandler
+     * @throws \DI\NotFoundException
+     */
+    public function getHttpHandler(){
+        return $this->container->get('framework\core\Request\HTTPHandler');
     }
 
     /**
@@ -90,7 +98,7 @@ class GlobalContainer
      * @return \framework\core\Forms\Form
      */
     public function buildForm($destination, $object){
-        
+
         if(null === $object){
             throw new \Exception(__METHOD__.'() needs object to build form , null given!');
         }
@@ -126,15 +134,6 @@ class GlobalContainer
     }
 
     /**
-     * Get sent data via $_POST or $_GET
-     * @return array
-     * @throws \Exception
-     */
-    public function getHTTPData(){
-        return ParametersHandler::handle();
-    }
-
-    /**
      * @return MailerLauncher
      * @throws \DI\NotFoundException
      */
@@ -162,7 +161,7 @@ class GlobalContainer
     /**
      * Whenever this function is called the route will be secured
      * if no user is logged visitor will be redirected to login route
-     * 
+     *
      * @param string $loginRoute
      */
     public function secureCommand($loginRoute){

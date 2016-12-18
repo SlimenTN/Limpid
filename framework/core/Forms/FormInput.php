@@ -1,17 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Slimen-PC
- * Date: 25/10/2016
- * Time: 15:35
- */
-
 namespace framework\core\Forms;
 
 /**
  * Class FormInput
  * @package framework\core\Forms
- * 
+ *
  * @author Arnaout Slimen <arnaout.slimen@sbc.tn>
  */
 class FormInput
@@ -20,7 +13,13 @@ class FormInput
     private $type;
     private $label;
     private $options;
-    
+
+    private $notAttributes = array(
+        'ajax',
+        'target_entity',
+        'static',
+    );
+
     function __construct($name, $type, $label = null, $options = array())
     {
         $this->name = $name;
@@ -29,6 +28,14 @@ class FormInput
         $this->options = $options;
     }
 
+    /**
+     * Check if the option is an input attribute
+     * @param $value
+     * @return bool
+     */
+    public function isInputAttribute($option){
+        return (!in_array($option, $this->notAttributes));
+    }
     /**
      * @return mixed
      */
@@ -92,6 +99,6 @@ class FormInput
     {
         $this->options = $options;
     }
-    
-    
+
+
 }

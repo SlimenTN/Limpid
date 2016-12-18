@@ -14,8 +14,8 @@
         "twig/twig": "^1.26",
         "doctrine/orm": "^2.5",
         "php-di/php-di": "^5.4",
-        "gregwar/formidable": "^1.0",
-        "phpmailer/phpmailer": "^5.2"
+        "phpmailer/phpmailer": "^5.2",
+        "symfony/property-access": "^3.2"
     },
     "autoload": {
         "psr-4": {

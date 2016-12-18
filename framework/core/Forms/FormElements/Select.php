@@ -1,0 +1,128 @@
+<?php
+
+namespace framework\core\Forms\FormElements;
+
+/**
+ * A select field
+ *
+ * @author Grégoire Passault <g.passault@gmail.com>
+ */
+class Select extends Field
+{
+    /**
+     * Is it a multiple select?
+     */
+    protected $multiple = false;
+
+    /**
+     * Childrens
+     */
+    protected $options = array();
+    
+    public function push($name, $value = null)
+    {
+        if ($name == 'multiple') {
+            $this->multiple = true;
+        }
+
+        parent::push($name, $value);
+    }
+
+    public function __sleep()
+    {
+        return array_merge(parent::__sleep(), array(
+            'options', 'multiple'
+        ));
+    }
+    
+    public function setValue($value, $default = false)
+    {
+        if ($this->multiple) {
+            if (is_array($value)) {
+                foreach ($value as &$v) {
+                    $v = (string)$v;
+                }
+                $this->value = $value;
+            } else {
+                $this->value = null;
+            }
+        } else {
+            parent::setValue($value, $default);
+        }
+    }
+
+    public function countOptions()
+    {
+        return count($this->options);
+    }
+
+    public function addOption(Option $option, $position = null)
+    {
+        $option->setParent($this);
+
+        if ($position == null) {
+            $this->options[] = $option;
+        } else {
+            for ($i = $this->countOptions(); $i > $position; $i--) {
+                $this->options[$i] = $this->options[$i-1];
+            }
+            $this->options[$position] = $option;
+        }
+    }
+
+    public function addValue($c)
+    {
+        $this->options[count($this->options)-1]->addValue($c);
+    }
+
+    public function check()
+    {
+        if ($error = parent::check()) {
+            return $error;
+        }
+
+        if (!$this->required && $this->value == '') {
+            return;
+        } else {
+            foreach ($this->options as $opt) {
+                if (($this->multiple && in_array($opt->getValue(), $this->value))
+                    || (!$this->multiple && $this->value == $opt->getValue())) {
+                    return;
+                }
+            }
+        }
+
+        return array('should_choose', $this->printName());
+    }
+
+    public function getHtml()
+    {
+        $arr = '';
+        if ($this->multiple) {
+            $arr = '[]';
+        }
+
+        $html = '<select name="'.$this->getName().$arr.'" ';
+        foreach ($this->attributes as $name => $value) {
+            $html.= $name.'="'.$value.'" ';
+        }
+        $html.= ">\n";
+
+//        if (!$this->required) {
+//            $html .= '<option value=""></option>';
+//        }
+//        var_dump($this->options);
+        foreach ($this->options as $option) {
+//            var_dump('here');
+            if (($this->multiple && is_array($this->value) && in_array($option->getValue(), $this->value))
+                || (!$this->multiple && $option->getValue() == $this->value)) {
+                $html .= $option->getOptionHtml(true);
+            } else {
+                $html .= $option->getOptionHtml(false);
+            }
+        }
+        $html .= "</select>\n";
+
+        return $html;
+    }
+}
