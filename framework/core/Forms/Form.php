@@ -22,7 +22,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Class Form
- * Build and handle form view based on given FormPrototype and object
  * @package framework\core\Forms
  *
  * @author Arnaout Slimen <arnaout.slimen@sbc.tn>
@@ -119,23 +118,33 @@ class Form
         $n = ($subFieldName == null) ? $input->getName() : $subFieldName;
 
         $field = null;
+        $fieldLabel = ($input->getLabel() == null) ? ucfirst($n) : $input->getLabel();
 
         switch ($input->getType()) {
             case 'text':
                 $field = new TextField();
+                $field->setFieldLabel($fieldLabel);
                 $field->setName($n);
                 $field->setValue($this->accessor->getValue($o, $input->getName()));
-
+                foreach ($input->getOptions() as $option => $value){
+                    if($input->isInputAttribute($option))
+                        $field->push($option, $value);
+                }
                 break;
             case 'textarea':
                 $field = new Textarea();
                 $field->setName($n);
+                $field->setFieldLabel($fieldLabel);
                 $field->setValue($this->accessor->getValue($o, $input->getName()));
-
+                foreach ($input->getOptions() as $option => $value){
+                    if($input->isInputAttribute($option))
+                        $field->push($option, $value);
+                }
                 break;
             case 'select':
                 $field = new Select();
                 $field->setName($n);
+                $field->setFieldLabel($fieldLabel);
                 foreach ($input->getOptions() as $option => $value){
                     if($input->isInputAttribute($option))
                         $field->push($option, $value);
@@ -145,21 +154,41 @@ class Form
             case 'file':
                 $field = new FileField();
                 $field->setName($n);
+                $field->setFieldLabel($fieldLabel);
+                foreach ($input->getOptions() as $option => $value){
+                    if($input->isInputAttribute($option))
+                        $field->push($option, $value);
+                }
                 break;
             case 'date':
                 $field = new DateField();
                 $field->setName($n);
+                $field->setFieldLabel($fieldLabel);
                 $field->setValue($this->accessor->getValue($o, $input->getName()));
+                foreach ($input->getOptions() as $option => $value){
+                    if($input->isInputAttribute($option))
+                        $field->push($option, $value);
+                }
                 break;
             case 'numeric':
                 $field = new NumberField();
                 $field->setName($n);
+                $field->setFieldLabel($fieldLabel);
                 $field->setValue($this->accessor->getValue($o, $input->getName()));
+                foreach ($input->getOptions() as $option => $value){
+                    if($input->isInputAttribute($option))
+                        $field->push($option, $value);
+                }
                 break;
             case 'checkbox':
                 $field = new CheckboxField();
+                $field->setFieldLabel($fieldLabel);
                 $field->setName($n);
                 $field->setValue($this->accessor->getValue($o, $input->getName()));
+                foreach ($input->getOptions() as $option => $value){
+                    if($input->isInputAttribute($option))
+                        $field->push($option, $value);
+                }
                 break;
             case 'multi-checkbox':
                 $field = new MulticheckboxField();
@@ -173,7 +202,12 @@ class Form
             case 'radio':
                 $field = new RadioField();
                 $field->setName($n);
+                $field->setFieldLabel($fieldLabel);
                 $field->setValue($this->accessor->getValue($o, $input->getName()));
+                foreach ($input->getOptions() as $option => $value){
+                    if($input->isInputAttribute($option))
+                        $field->push($option, $value);
+                }
                 break;
             case 'multi-radio':
                 $field = new MultiradioField();
@@ -300,6 +334,7 @@ class Form
      */
     public function getFormHtml()
     {
+//        var_dump($this->formWidgets);
         return $this->generateHtmlFromWidgets($this->formWidgets);
     }
 
@@ -310,12 +345,23 @@ class Form
      */
     private function generateHtmlFromWidgets($widgets){
         $html = '<table>';
-        foreach ($widgets as $key => $widget){
-            if(!is_array($widget)){
-                $html .= $this->generateTableRow($widget);
+        foreach ($widgets as $name => $object){
+            if(is_array($object)){
+                $__parentLabel = $this->guessLabel($name);
+                $html .= '<tr>';
+                $html .= '<td>'.$__parentLabel.'</td>';
+                $html .= '<td>';
+                $html .= '<table id="'.$name.'">';
+                foreach ($object as $array){
+                    foreach ($array as $fn => $field){
+                        $html .= $this->generateTableRow($field);
+                    }
+                }
+                $html .= '</table>';
+                $html .= '</td>';
+                $html .= '</tr>';
             }else{
-                $html .= '<tr><td><label>'.$this->guessLabel($key).'</label></td>';
-                $html .= '<td>'.$this->generateHtmlFromWidgets($widget).'</td></tr>';
+                $html .= $this->generateTableRow($object);
             }
         }
         $html .= '</table>';
@@ -330,7 +376,7 @@ class Form
         $tr = '';
         if(!$field instanceof HiddenField){
             $tr = '<tr>';
-            $tr .= '<td><label>'.$this->guessLabel($field->getName()).'</label></td>';
+            $tr .= '<td><label>'.$field->getFieldLabel().'</label></td>';
             $tr .= '<td>'.$field->getHtml().'</td>';
             $tr .= '</tr>';
         }else{
@@ -370,7 +416,6 @@ class Form
         $res = $this->container->getHttpHandler()->get(HTTPHandler::POST);
 
         if(!empty($res)){
-//            var_dump($res);
             $this->handleRequest($res);
             return true;
         }else{
@@ -435,7 +480,9 @@ class Form
 
                     foreach ($objectsToRemove as $or){
                         $collection->removeElement($or);
+                        $this->container->getEntityManager()->remove($or);
                     }
+
                 }else{
 
                     $entitiesToRemove = $this->entitiesToRemove($collection, $value);

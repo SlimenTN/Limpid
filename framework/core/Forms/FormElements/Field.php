@@ -74,6 +74,12 @@ abstract class Field extends LanguageAware
      */
     protected $mapping;
 
+    /**
+     * Related label for each form field
+     * @var string
+     */
+    private $fieldLabel;
+
     public function __sleep()
     {
         return array(
@@ -358,5 +364,22 @@ abstract class Field extends LanguageAware
     public function readOnly()
     {
         return $this->readonly;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFieldLabel()
+    {
+        return $this->fieldLabel;
+    }
+
+    /**
+     * @param string $fieldLabel
+     */
+    public function setFieldLabel($fieldLabel)
+    {
+        $this->fieldLabel = $fieldLabel;
+        return $this;
     }
 }
