@@ -9,129 +9,129 @@ namespace framework\core\Forms\FormElements;
  */
 class DateField extends Field
 {
-    /**
-     * Push save
-     */
-    protected $pushSave = array();
+	/**
+	 * Push save
+	 */
+	protected $pushSave = array();
 
-    /**
-     * Sub-field
-     */
-    protected $fields;
+	/**
+	 * Sub-field
+	 */
+	protected $fields;
 
-    public function __sleep()
-    {
-        return array_merge(parent::__sleep(), array(
-            'pushSave', 'fields'
-        ));
-    }
-
-    public function push($var, $value = null)
-    {
-	if ($var == 'name' || $var == 'required' || $var == 'mapping') {
-	    parent::push($var, $value);
-	} else {
-	    $this->pushSave[$var] = $value;
-	}
-    }
-
-    public function setValue($value, $default = false)
-    {
-	if (is_string($value)) {
-	    $value = new \DateTime($value);
+	public function __sleep()
+	{
+		return array_merge(parent::__sleep(), array(
+			'pushSave', 'fields'
+		));
 	}
 
-	if ($value instanceof \DateTime) {
-	    $value = array(
-		'day' => $value->format('d'),
-		'month' => $value->format('m'),
-		'year' => $value->format('Y')
-	    );
+	public function push($var, $value = null)
+	{
+		if ($var == 'name' || $var == 'required' || $var == 'mapping') {
+			parent::push($var, $value);
+		} else {
+			$this->pushSave[$var] = $value;
+		}
 	}
 
-	$this->value = $value;
-    }
+	public function setValue($value, $default = false)
+	{
+		if (is_string($value)) {
+			$value = new \DateTime($value);
+		}
 
-    public function getValue()
-    {
-	if (!$this->check()) {
-	    return new \DateTime(sprintf('%04d-%02d-%02d',
-		$this->value['year'],
-		$this->value['month'],
-		$this->value['day']
-	    ));
+		if ($value instanceof \DateTime) {
+			$value = array(
+				'day' => $value->format('d'),
+				'month' => $value->format('m'),
+				'year' => $value->format('Y')
+			);
+		}
+
+		$this->value = $value;
 	}
 
-	return null;
-    }
+	public function getValue()
+	{
+		if (!$this->check()) {
+			return new \DateTime(sprintf('%04d-%02d-%02d',
+				$this->value['year'],
+				$this->value['month'],
+				$this->value['day']
+			));
+		}
 
-    public function check()
-    {
-	$this->generate();
-	$filled = 0;
-
-	foreach ($this->fields as $field) {
-	    if ($field->getValue() && !$field->check()) {
-		$filled++;
-	    }
+		return null;
 	}
 
-        if (($this->required && $filled==0)||($filled>0 && $filled<count($this->fields))) {
-            return array('bad_date', $this->printName());
+	public function check()
+	{
+		$this->generate();
+		$filled = 0;
+
+		foreach ($this->fields as $field) {
+			if ($field->getValue() && !$field->check()) {
+				$filled++;
+			}
+		}
+
+		if (($this->required && $filled == 0) || ($filled > 0 && $filled < count($this->fields))) {
+			return array('bad_date', $this->printName());
+		}
 	}
-    }
 
-    protected function generate()
-    {
-	$this->fields = array();
+	protected function generate()
+	{
+		$this->fields = array();
 
-	$this->fields[] = $this->createSelect('day', range(1, 31));
-	$this->fields[] = $this->createSelect('month', range(1, 12));
-	$this->fields[] = $this->createSelect('year', range(date('Y')-120, date('Y')));
-    }
+		$this->fields[] = $this->createSelect('day', range(1, 31));
+		$this->fields[] = $this->createSelect('month', range(1, 12));
+		$this->fields[] = $this->createSelect('year', range(date('Y') - 120, date('Y') + 20));
+	}
 
-    protected function createSelect($name, $options)
-    {
-        $select = new Select;
+	protected function createSelect($name, $options)
+	{
+		$select = new Select;
 //        $select->setLanguage($this->language);
-		$select->push('name', $this->getName().'['.$name.']');
+		$select->push('name', $this->getName() . '[' . $name . ']');
 
-	if ($this->value && $this->value[$name]) {
-	    $select->setValue($this->value[$name]);
+		if ($this->value && $this->value[$name]) {
+			$select->setValue($this->value[$name]);
+		}
+
+		$this->proxyPush($select);
+		$this->buildOptions($select, $options);
+
+		return $select;
 	}
 
-	$this->proxyPush($select);
-	$this->buildOptions($select, $options);
-
-	return $select;
-    }
-
-    protected function buildOptions(&$select, $range)
-    {
-	foreach ($range as $value) {
-	    $option = new Option;
-	    $option->setValue($value, true);
-	    $option->setLabel($value);
-	    $select->addOption($option);
-	}
-    }
-
-    protected function proxyPush($target)
-    {
-	foreach ($this->pushSave as $var => $value) {
-	    $target->push($var, $value);
-	}
-    }
-
-    public function getHtml()
-    {
-	$this->generate();
-	$html = '';
-
-	foreach ($this->fields as $field) {
-	    $html .= $field->getHtml();
+	protected function buildOptions(Select $select, $range)
+	{
+		foreach ($range as $value) {
+			$option = new Option;
+			$option->setValue($value, true);
+			$option->setLabel($value);
+			$select->addOption($option);
+		}
 	}
 
-	return $html;
-    }
+	protected function proxyPush($target)
+	{
+		foreach ($this->pushSave as $var => $value) {
+			$target->push($var, $value);
+		}
+	}
+
+	public function getHtml()
+	{
+		$this->generate();
+		$html = '';
+
+		foreach ($this->fields as $field) {
+			$html .= $field->getHtml();
+		}
+
+		return $html;
+	}
 }

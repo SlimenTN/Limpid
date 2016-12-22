@@ -212,9 +212,10 @@ class Form
             case 'multi-radio':
                 $field = new MultiradioField();
                 $field->setName($n);
-                $data = array('NON' => 'Non', 'OUI' => 'Oui');
+                $field->setFieldLabel($fieldLabel);
+                $data = array(false => 'Non', true => 'Oui');
                 $field->source($data);
-//                $field->setValue($this->accessor->getValue($o, $input->getName()));
+                $field->setValue($this->accessor->getValue($o, $input->getName()));
                 break;
             case 'collection':
                 $entities = $this->accessor->getValue($o, $input->getName());
@@ -574,6 +575,7 @@ class Form
      * @return FormInput|null
      */
     private function inputFormType($attr){
+//        var_dump($this->inputs);
         foreach ($this->inputs as $input){
             if($input->getName() == $attr) return $input;
         }
