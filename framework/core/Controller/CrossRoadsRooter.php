@@ -4,6 +4,7 @@ namespace framework\core\Controller;
 use framework\config\AppParamters;
 use framework\core\Router\RoutesCollector;
 use framework\core\Router\URLParser;
+use Symfony\Component\Debug\Debug;
 
 
 /**
@@ -50,9 +51,11 @@ class CrossRoadsRooter{
      */
     function __construct()
     {
+        Debug::enable();
         $collector = new RoutesCollector();
         $this->routes = $collector->getRoutes();
         $this->request = $this->findUserRequest();
+
     }
 
     /**
@@ -73,6 +76,7 @@ class CrossRoadsRooter{
             self::$CURRENT_ROUTE = $this->commandToExecute['route_name'];
             $this->executeURLCommand();
         }else{
+//            throw new NotFoundException('No route found for the url "'.$this->request.'". Please check your routes!');
             throw new \Exception('No route found for the url "'.$this->request.'". Please check your routes!');
         }
     }
@@ -117,12 +121,15 @@ class CrossRoadsRooter{
      */
     private function executeCommande($controllerClass, $commandName){
         $controller = new $controllerClass();
-        if(method_exists($controller, $commandName)){
-            call_user_func_array(array($controller, $commandName), $this->commandToExecute['parameters']);
+        if($controller instanceof AppController){
+            if(method_exists($controller, $commandName)){
+                call_user_func_array(array($controller, $commandName), $this->commandToExecute['parameters']);
+            }else{
+                throw new \Exception('Error: the command '.$commandName.' is not defined in the controller '.$controllerClass.'!');
+            }
         }else{
-            throw new \Exception('Error: the command '.$commandName.' is not defined in the controller '.$controllerClass.'!');
+            throw new \Exception('Your controller "'.$controllerClass.'" must extends from framework\core\Controller\AppController class');
         }
-
     }
 
     /**
@@ -175,7 +182,7 @@ class CrossRoadsRooter{
      * @return mixed
      */
     public static function getRoutesFiles($module){
-        return include __DIR__.'/../../../app/'.$module.self::MODULE.'/'.self::CONFIG.'/routes.php';
+        return include __DIR__.'/../../../app/'.$module.self::MODULE.'/Config/routes.php';
     }
 
     /**

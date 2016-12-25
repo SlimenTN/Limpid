@@ -12,7 +12,6 @@ use framework\core\Forms\FormElements\MulticheckboxField;
 use framework\core\Forms\FormElements\MultiradioField;
 use framework\core\Forms\FormElements\NumberField;
 use framework\core\Forms\FormElements\Option;
-use framework\core\Forms\FormElements\RadioField;
 use framework\core\Forms\FormElements\Select;
 use framework\core\Forms\FormElements\Textarea;
 use framework\core\Forms\FormElements\TextField;
@@ -181,41 +180,38 @@ class Form
                 }
                 break;
             case 'checkbox':
-                $field = new CheckboxField();
-                $field->setFieldLabel($fieldLabel);
-                $field->setName($n);
-                $field->setValue($this->accessor->getValue($o, $input->getName()));
-                foreach ($input->getOptions() as $option => $value){
-                    if($input->isInputAttribute($option))
-                        $field->push($option, $value);
-                }
-                break;
-            case 'multi-checkbox':
-                $field = new MulticheckboxField();
-                $field->setName($n);
-                $data = array('10' => 'Piscine', '20' => 'Garage', '25' => 'Jardin');
-                $field->source($data);
-                $v = array('20' => 'Garage', '25' => 'Jardin');
-                $field->setValue($v);
-
+                $field = $this->buildCheckBox($fieldLabel, $n, $o, $input);
                 break;
             case 'radio':
-                $field = new RadioField();
-                $field->setName($n);
-                $field->setFieldLabel($fieldLabel);
-                $field->setValue($this->accessor->getValue($o, $input->getName()));
-                foreach ($input->getOptions() as $option => $value){
-                    if($input->isInputAttribute($option))
-                        $field->push($option, $value);
+                $options = $input->getOptions();
+                if(array_key_exists('static', $options) && array_key_exists('target_entity', $options)){
+                    throw new \Exception('Error while rendering radio field for the attribute "'.$input->getName().'".
+                    You can\'t put the two options "static" and "target_entity" together. Use only one of them.');
+                }else if(array_key_exists('static', $options)){
+                    $field = new MultiradioField();
+                    $field->setName($n);
+                    $field->setFieldLabel($fieldLabel);
+
+                    $source = $options['static'];
+                    $field->source($source);
+
+                    $field->setValue($this->accessor->getValue($o, $input->getName()));
+
+                }else if(array_key_exists('target_entity', $options)){
+                    $field = new MultiradioField();
+                    $field->setName($n);
+                    $field->setFieldLabel($fieldLabel);
+
+                    $entity = $this->container->getEntityNamespace($options['target_entity']);
+                    $dbCollection = $this->container->getEntityManager()->getRepository($entity)->findAll();
+                    $source = array();
+                    foreach ($dbCollection as $e){
+                        $source[$e->getId()] = $e->__toString();
+                    }
+                    $field->source($source);
+                    $entity = $this->accessor->getValue($o, $input->getName());
+                    $field->setValue($entity->getId());
                 }
-                break;
-            case 'multi-radio':
-                $field = new MultiradioField();
-                $field->setName($n);
-                $field->setFieldLabel($fieldLabel);
-                $data = array(false => 'Non', true => 'Oui');
-                $field->source($data);
-                $field->setValue($this->accessor->getValue($o, $input->getName()));
                 break;
             case 'collection':
                 $entities = $this->accessor->getValue($o, $input->getName());
@@ -258,6 +254,47 @@ class Form
             $counter++;
         }
         return $sw;
+    }
+
+    /**
+     * @param $fieldLabel
+     * @param $n
+     * @param $o
+     * @param FormInput $input
+     * @return CheckboxField|MulticheckboxField|null
+     */
+    private function buildCheckBox($fieldLabel, $n, $o, FormInput $input){
+        $field = null;
+        if (array_key_exists('target_entity', $input->getOptions())){
+            $field = new MulticheckboxField();
+            $field->setName($n);
+            $field->setFieldLabel($fieldLabel);
+            $entity = $this->container->getEntityNamespace($input->getOptions()['target_entity']);
+            $dbCollection = $this->container->getEntityManager()->getRepository($entity)->findAll();
+            $source = array();
+            foreach ($dbCollection as $e){
+                $source[$e->getId()] = $e->__toString();
+            }
+            $field->source($source);
+
+            $objectCollection = $this->accessor->getValue($o, $input->getName());
+            $values = array();
+            foreach ($objectCollection as $e){
+                $values[$e->getId()] = $e->__toString();
+            }
+//                        var_dump($values);
+            $field->setValue($values);
+        }else{
+            $field = new CheckboxField();
+            $field->setFieldLabel($fieldLabel);
+            $field->setName($n);
+            $field->setValue($this->accessor->getValue($o, $input->getName()));
+            foreach ($input->getOptions() as $option => $value){
+                if($input->isInputAttribute($option))
+                    $field->push($option, $value);
+            }
+        }
+        return $field;
     }
 
     /**
