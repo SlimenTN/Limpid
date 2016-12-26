@@ -4,6 +4,9 @@ namespace framework\core\Console\Commands;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use framework\core\Controller\CrossRoadsRooter;
 use framework\core\Repository\DoctrineLoader;
 use Symfony\Component\Console\Command\Command;
@@ -14,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class GenerateFormCommand
  * @package framework\core\Console\Commands
- * 
+ *
  * Arnaout Slimen <arnaout.slimen@sbc.tn>
  */
 class GenerateFormCommand extends Command
@@ -58,9 +61,12 @@ class GenerateFormCommand extends Command
         'text' => 'textarea',
         'boolean' => 'checkbox',
         'integer' => 'numeric',
-        'date' => 'date'
+        'date' => 'date',
+        'manytomany' => 'select',
+        'onetomany' => 'collection',
+        'manytoone' => 'select'
     );
-    
+
     protected function configure()
     {
         $this
@@ -76,7 +82,7 @@ class GenerateFormCommand extends Command
 
             ->addArgument('entity_name', InputArgument::REQUIRED, 'Entity\'s name.');
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $tab = explode(':', $input->getArgument('entity_name'));
@@ -84,7 +90,7 @@ class GenerateFormCommand extends Command
             $output->writeln('Please enter the entity\'s name under this format "Module:Entity"');
             return;
         }
-        
+
         $this->module = $tab[0];
         $this->entity = $tab[1];
         $this->fullModule = $this->module.CrossRoadsRooter::MODULE;
@@ -108,14 +114,14 @@ class GenerateFormCommand extends Command
         }
 
         $className = 'app\\'.$this->fullModule.'\\'.CrossRoadsRooter::ENTITY.'\\'.$this->entity;
-        
+
         $doc = new DoctrineLoader();
         $em = $doc->getEntityManager();
         $this->primaryKey = $em->getClassMetadata($className)->getSingleIdentifierFieldName();
-        
-        $this->reflectionClass = new \ReflectionClass($className);        
-        $this->fields = $this->reflectionClass->getProperties();        
-        
+
+        $this->reflectionClass = new \ReflectionClass($className);
+        $this->fields = $this->reflectionClass->getProperties();
+
         $this->generatePrototype();
 
         $output->writeln('The FormPrototype has been successfully generated.');
@@ -128,7 +134,7 @@ class GenerateFormCommand extends Command
         $content = $this->buildPrototypeContent();
         file_put_contents($prototypePath, $content);
     }
-    
+
     private function buildPrototypeContent(){
         $content = '<?php
 namespace app\\'.$this->fullModule.'\\'.CrossRoadsRooter::FORM_DIRECTORY.';
@@ -149,10 +155,10 @@ class '.$this->entity.CrossRoadsRooter::FORM.' implements FormBuilderInterface
     }
 }
         ';
-        
+
         return $content;
     }
-    
+
     private function buildFormBuilder(){
         $reader = new AnnotationReader();
         $builder = '';
@@ -160,17 +166,35 @@ class '.$this->entity.CrossRoadsRooter::FORM.' implements FormBuilderInterface
             if($field->name != $this->primaryKey){
                 $f = $this->reflectionClass->getProperty($field->name);
                 $annotations = $reader->getPropertyAnnotations($f);
-                
+                var_dump($annotations);
                 if(isset($annotations[0])){
                     $object = $annotations[0];
                     $type= '';
-                    if($object instanceof Column){
+                    $extra = '';
+                    if($object instanceof Column) {
                         $type = $object->type;
+                    }else if($object instanceof ManyToMany){
+                        $type = 'manytomany';
+                        $extra .= ', null, array(
+                \'target_entity\' => \''.$this->module.':'.$object->targetEntity.'\',
+                \'multiple\' => true,
+                )';
+                    }else if($object instanceof OneToMany){
+                        $type = 'onetomany';
+                        $extra .= ', null, array(
+                \'target_entity\' => \''.$this->module.':'.$object->targetEntity.'\',
+                )';
+                    }else if($object instanceof ManyToOne){
+                        $type = 'manytoone';
+                        $extra .= ', null, array(
+                \'target_entity\' => \''.$this->module.':'.$object->targetEntity.'\',
+                )';
                     }
+
                     $builder .= "
-            ->addInput('".$field->name."', '".$this->typeFieldsMapping[$type]."')";
+            ->addInput('".$field->name."', '".$this->typeFieldsMapping[$type]."'".$extra.")";
                 }
-                
+
             }
         }
         return $builder;

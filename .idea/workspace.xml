@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0f8cb4aa-7350-4078-816f-87049d2f2947" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/framework/core/Controller/CommandExecutor.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/framework/core/Twig/LimpidExtensions/ExecuteCommandExtension.php" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/gregwar/cache/Gregwar/Cache/.gitignore" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/gregwar/cache/Gregwar/Cache/.travis.yml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/gregwar/cache/Gregwar/Cache/Cache.php" afterPath="" />
@@ -194,9 +196,12 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/phpmailer/phpmailer/test/test_callback.php" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/phpmailer/phpmailer/test/testbootstrap-dist.php" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/phpmailer/phpmailer/travis.phpunit.xml.dist" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/framework/config/ConsoleCommandsBook.php" afterPath="$PROJECT_DIR$/framework/core/Console/LimpidCommandsBook.php" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/framework/config/TwigExtensionsBook.php" afterPath="$PROJECT_DIR$/framework/core/Twig/LimpidExtensionsBook.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/core/Console/Commands/GenerateFormCommand.php" afterPath="$PROJECT_DIR$/framework/core/Console/Commands/GenerateFormCommand.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/core/Controller/CrossRoadsRooter.php" afterPath="$PROJECT_DIR$/framework/core/Controller/CrossRoadsRooter.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/core/Forms/Form.php" afterPath="$PROJECT_DIR$/framework/core/Forms/Form.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/core/Twig/TwigLauncher.php" afterPath="$PROJECT_DIR$/framework/core/Twig/TwigLauncher.php" />
     </list>
     <ignored path="Limpid.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -221,7 +226,7 @@
       <file leaf-file-name="Form.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/framework/core/Forms/Form.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7849">
+            <state relative-caret-position="12138">
               <caret line="730" column="1" selection-start-line="730" selection-start-column="1" selection-end-line="730" selection-end-column="1" />
               <folding>
                 <element signature="e#39#82#0#PHP" expanded="true" />
@@ -233,8 +238,8 @@
       <file leaf-file-name="CrossRoadsRooter.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/framework/core/Controller/CrossRoadsRooter.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2210">
-              <caret line="130" column="69" selection-start-line="130" selection-start-column="69" selection-end-line="130" selection-end-column="69" />
+            <state relative-caret-position="2980">
+              <caret line="176" column="33" selection-start-line="176" selection-start-column="33" selection-end-line="176" selection-end-column="33" />
               <folding>
                 <element signature="e#44#78#0#PHP" expanded="true" />
               </folding>
@@ -242,11 +247,73 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="CommandExecutor.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/framework/core/Controller/CommandExecutor.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="app_launcher.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app_launcher.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
+            <state relative-caret-position="408">
+              <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
+              <folding>
+                <marker date="1482679925907" expanded="true" signature="559:643" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TwigLauncher.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/framework/core/Twig/TwigLauncher.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1480">
+              <caret line="115" column="1" selection-start-line="115" selection-start-column="1" selection-end-line="115" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LimpidCommandsBook.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/framework/core/Console/LimpidCommandsBook.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GenerateFormCommand.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/framework/core/Console/Commands/GenerateFormCommand.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="867">
+              <caret line="201" column="1" selection-start-line="201" selection-start-column="1" selection-end-line="201" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExecuteCommandExtension.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/framework/core/Twig/LimpidExtensions/ExecuteCommandExtension.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LimpidExtensionsBook.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/framework/core/Twig/LimpidExtensionsBook.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -266,7 +333,6 @@
         <option value="$PROJECT_DIR$/framework/config/AppRoutes.php" />
         <option value="$PROJECT_DIR$/framework/config/AppParamters.php" />
         <option value="$PROJECT_DIR$/framework/config/router.php" />
-        <option value="$PROJECT_DIR$/app_launcher.php" />
         <option value="$PROJECT_DIR$/framework/core/Console/Commands/LaunchModuleCommand.php" />
         <option value="$PROJECT_DIR$/app/HelloLimpidModule/View/app.html.twig" />
         <option value="$PROJECT_DIR$/composer.json" />
@@ -275,6 +341,9 @@
         <option value="$PROJECT_DIR$/framework/core/Forms/FormElements/Field.php" />
         <option value="$PROJECT_DIR$/framework/core/Forms/FormElements/DateField.php" />
         <option value="$PROJECT_DIR$/framework/core/Forms/Form.php" />
+        <option value="$PROJECT_DIR$/app_launcher.php" />
+        <option value="$PROJECT_DIR$/framework/core/Twig/TwigLauncher.php" />
+        <option value="$PROJECT_DIR$/framework/core/Console/Commands/GenerateFormCommand.php" />
         <option value="$PROJECT_DIR$/framework/core/Controller/CrossRoadsRooter.php" />
       </list>
     </option>
@@ -316,7 +385,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -389,9 +457,14 @@
               <option name="myItemId" value="framework" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -401,11 +474,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\wamp\www\Resources\Limpid\framework\core\Controller" />
+      <recent name="C:\wamp\www\Resources\Limpid\framework\core\Console" />
+      <recent name="C:\wamp\www\Resources\Limpid\framework\core\Twig\LimpidExtensions" />
+      <recent name="C:\wamp\www\Resources\Limpid\framework\core\Twig" />
       <recent name="C:\wamp\www\Resources\Limpid\framework\core\Forms" />
-      <recent name="C:\wamp\www\Resources\Limpid\framework\core\Forms\FormElements" />
-      <recent name="C:\wamp\www\Resources\Limpid\framework\core\Request" />
-      <recent name="C:\wamp\www\Resources\Limpid\framework\core\Console\Commands" />
-      <recent name="C:\wamp\www\Resources\Limpid\framework\config" />
     </key>
   </component>
   <component name="RunManager">
@@ -461,12 +534,13 @@
       <workItem from="1482079488723" duration="1462000" />
       <workItem from="1482177190778" duration="520000" />
       <workItem from="1482438329240" duration="133000" />
-      <workItem from="1482679733829" duration="139000" />
+      <workItem from="1482679733829" duration="453000" />
+      <workItem from="1482783719001" duration="241000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23599000" />
+    <option name="totallyTimeSpent" value="24154000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -481,7 +555,7 @@
     <frame x="-8" y="-8" width="1296" height="776" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23381877" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23786408" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293011" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -508,48 +582,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/framework/config/TwigExtensionsBook.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="8" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/HelloLimpidModule/View/main.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="31" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/HelloLimpidModule/View/app.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/composer.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="54" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/HelloLimpidModule/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="5" selection-start-line="11" selection-start-column="4" selection-end-line="13" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/framework/config/AppParamters.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="41" column="27" selection-start-line="41" selection-start-column="27" selection-end-line="41" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/framework/config/AppRoutes.php" />
     <entry file="file://$PROJECT_DIR$/framework/config/TwigExtensionsBook.php">
       <provider selected="true" editor-type-id="text-editor">
@@ -767,7 +799,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -775,9 +806,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="19" column="3" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="3" />
-          <folding>
-            <element signature="e#44#68#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -813,7 +841,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="319">
           <caret line="37" column="34" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -821,7 +848,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6511">
           <caret line="383" column="5" selection-start-line="383" selection-start-column="5" selection-end-line="383" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -829,21 +855,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1632">
           <caret line="96" column="51" selection-start-line="96" selection-start-column="51" selection-end-line="96" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app_launcher.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="30" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/framework/core/Forms/Form.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7849">
+        <state relative-caret-position="12138">
           <caret line="730" column="1" selection-start-line="730" selection-start-column="1" selection-end-line="730" selection-end-column="1" />
           <folding>
             <element signature="e#39#82#0#PHP" expanded="true" />
@@ -851,10 +868,68 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app_launcher.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
+          <folding>
+            <marker date="1482679925907" expanded="true" signature="559:643" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/framework/core/Twig/LimpidExtensions/ExecuteCommandExtension.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/framework/core/Twig/LimpidExtensionsBook.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/framework/core/Twig/TwigLauncher.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1480">
+          <caret line="115" column="1" selection-start-line="115" selection-start-column="1" selection-end-line="115" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/framework/core/Console/LimpidCommandsBook.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/framework/core/Console/Commands/GenerateFormCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="867">
+          <caret line="201" column="1" selection-start-line="201" selection-start-column="1" selection-end-line="201" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/framework/core/Controller/CommandExecutor.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/framework/core/Controller/CrossRoadsRooter.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2210">
-          <caret line="130" column="69" selection-start-line="130" selection-start-column="69" selection-end-line="130" selection-end-column="69" />
+        <state relative-caret-position="2980">
+          <caret line="176" column="33" selection-start-line="176" selection-start-column="33" selection-end-line="176" selection-end-column="33" />
           <folding>
             <element signature="e#44#78#0#PHP" expanded="true" />
           </folding>

@@ -1,17 +1,13 @@
 <?php
-namespace framework\config;
+namespace framework\core\Twig;
 
 /**
- * Class TwigExtensionsBook
- * All twig extensions goes here
- * @package framework\config
+ * Class LimpidExtensionsBook
+ * @package framework\core\Twig
  */
-class TwigExtensionsBook{
-
+class LimpidExtensionsBook
+{
     public static $EXTENSIONS = array(
-        /**
-         * Limpid's extensions-------------------
-         */
         'framework\core\Twig\LimpidExtensions\RouteConverterExtension',
         'framework\core\Twig\LimpidExtensions\AssetsExtension',
         'framework\core\Twig\LimpidExtensions\FormToTwigBridge\ControlBridge',
@@ -21,13 +17,6 @@ class TwigExtensionsBook{
         'framework\core\Twig\LimpidExtensions\TranslatorExtension',
         'framework\core\Twig\LimpidExtensions\SwitchTranslationExtension',
         'framework\core\Twig\LimpidExtensions\CurrentRouteExtension',
-
-        /**
-         * You can add your extensions here--------------
-         * 
-         * ex: 'app\HelloWorldModule\Twig\MyNewExtension',
-         */
-        
+        'framework\core\Twig\LimpidExtensions\ExecuteCommandExtension',
     );
-    
 }

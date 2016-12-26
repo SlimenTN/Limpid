@@ -1,14 +1,13 @@
 <?php
 namespace framework\core\Twig;
 
-
-use framework\config\TwigExtensionsBook;
+use framework\core\Controller\CrossRoadsRooter;
 
 /**
  * Class TwigLauncher
  * Fire twig functions
  * @package framework\core\Twig
- * 
+ *
  * @author Arnaout Slimen <arnaout.slimen@sbc.tn>
  */
 class TwigLauncher{
@@ -34,8 +33,8 @@ class TwigLauncher{
      * @param $template
      * @throws \Twig_Error_Loader
      */
-    public function addTemplate($template){
-        $this->loader->addPath($template);
+    public function addTemplate($template, $namespace = \Twig_Loader_Filesystem::MAIN_NAMESPACE){
+        $this->loader->addPath($template, $namespace);
     }
 
     /**
@@ -44,7 +43,7 @@ class TwigLauncher{
      * @param $parameters
      * @return string
      */
-    public function paintView($view, $parameters){
+    public function paintView($view, $parameters = array()){
         return $this->twig->render($view, $parameters);
     }
 
@@ -60,10 +59,58 @@ class TwigLauncher{
      * Enable all twig extensions declared in the app
      */
     private function enableAppTwigExtensions(){
-        $arrayExtensionsClass = TwigExtensionsBook::$EXTENSIONS;
+        $this->addLimpidExtensions();
+        $this->addExternalExtensions();
+    }
+
+    public function addLimpidExtensions(){
+        $arrayExtensionsClass = LimpidExtensionsBook::$EXTENSIONS;
         foreach ($arrayExtensionsClass as $class){
             $instance = new $class();
-            $this->addExtension($instance->getExtension());
+            if($instance instanceof TwigCustomExtension){
+                $this->addExtension($instance->getExtension());
+            }else{
+                throw new \Exception('Your Twig extension "'.$class.'" must implements TwigCustomExtension');
+            }
         }
+    }
+
+    private function addExternalExtensions(){
+        $modules = $this->getAvailableModules();
+        foreach ($modules as $module){
+            $twigDirectory = __DIR__ . '/../../../app/' . $module . '/' . CrossRoadsRooter::TWIG;
+            if(is_dir($twigDirectory)){
+                $extensionsFiles = scandir(__DIR__ . '/../../../app/' . $module . '/' . CrossRoadsRooter::TWIG);
+                foreach ($extensionsFiles as $file) {
+                    if ($file != '.' && $file != '..') {
+                        $className = str_replace('.php', '', $file);
+                        $namespace = "app\\".$module."\\".CrossRoadsRooter::TWIG."\\".$className;
+                        $instance = new $namespace();
+                        if($instance instanceof TwigCustomExtension){
+                            $this->addExtension($instance->getExtension());
+                        }else{
+                            throw new \Exception('Your Twig extension "'.$className.'" under "'.$module.'" must implements TwigCustomExtension');
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailableModules()
+    {
+        $directories = scandir(__DIR__ . '/../../../app');
+        $modules = array();
+
+        foreach ($directories as $dir) {
+            if (strpos($dir, CrossRoadsRooter::MODULE) !== false) {
+                $modules[] = $dir;
+            }
+        }
+
+        return $modules;
     }
 }

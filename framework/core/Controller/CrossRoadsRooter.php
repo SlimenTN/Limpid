@@ -26,6 +26,7 @@ class CrossRoadsRooter{
     const FORM = 'Form';
     const CONFIG = 'Config';
     const TRANSLATOR = 'Translator';
+    const TWIG = 'Twig';
 
     public static $LANG = AppParamters::DEFAULT_LANG;
 
@@ -74,61 +75,11 @@ class CrossRoadsRooter{
         $this->commandToExecute = URLParser::parse($this->request, $this->routes);
         if($this->commandToExecute !== null){
             self::$CURRENT_ROUTE = $this->commandToExecute['route_name'];
-            $this->executeURLCommand();
+            $executor = new CommandExecutor($this->commandToExecute['command'], $this->commandToExecute['parameters']);
+            $executor->execute();
         }else{
 //            throw new NotFoundException('No route found for the url "'.$this->request.'". Please check your routes!');
             throw new \Exception('No route found for the url "'.$this->request.'". Please check your routes!');
-        }
-    }
-
-    /**
-     * Fetch and execute user's command
-     */
-    private function executeURLCommand(){
-        list($module_controller, $command) = explode(":", $this->commandToExecute['command']);
-        list($module, $controller) = explode("_", $module_controller);
-
-        $class = $this->buildClassName($module, $controller);
-
-        $commandName = $this->buildCommandName($command);
-
-        $this->executeCommande($class, $commandName);
-    }
-
-    /**
-     * Build class name
-     * @param $module
-     * @param $controller
-     * @return string
-     */
-    private function buildClassName($module, $controller){
-        return 'app\\'.$module.self::MODULE.'\\'.self::CONTROLLER.'\\'.$controller.'Controller';
-    }
-
-    /**
-     * Build command name
-     * @param $command
-     * @return string
-     */
-    private function buildCommandName($command){
-        return $command.self::COMMAND;
-    }
-
-    /**
-     * Execute command
-     * @param $class
-     * @param $commandName
-     */
-    private function executeCommande($controllerClass, $commandName){
-        $controller = new $controllerClass();
-        if($controller instanceof AppController){
-            if(method_exists($controller, $commandName)){
-                call_user_func_array(array($controller, $commandName), $this->commandToExecute['parameters']);
-            }else{
-                throw new \Exception('Error: the command '.$commandName.' is not defined in the controller '.$controllerClass.'!');
-            }
-        }else{
-            throw new \Exception('Your controller "'.$controllerClass.'" must extends from framework\core\Controller\AppController class');
         }
     }
 
