@@ -166,7 +166,7 @@ class '.$this->entity.CrossRoadsRooter::FORM.' implements FormBuilderInterface
             if($field->name != $this->primaryKey){
                 $f = $this->reflectionClass->getProperty($field->name);
                 $annotations = $reader->getPropertyAnnotations($f);
-                var_dump($annotations);
+
                 if(isset($annotations[0])){
                     $object = $annotations[0];
                     $type= '';
