@@ -2,6 +2,7 @@
 namespace framework\core\Controller;
 
 use framework\config\AppParamters;
+use framework\core\Exception\NotFoundException;
 use framework\core\Router\RoutesCollector;
 use framework\core\Router\URLParser;
 use Symfony\Component\Debug\Debug;
@@ -27,6 +28,7 @@ class CrossRoadsRooter{
     const CONFIG = 'Config';
     const TRANSLATOR = 'Translator';
     const TWIG = 'Twig';
+    public static $prod = true;
 
     public static $LANG = AppParamters::DEFAULT_LANG;
 
@@ -50,8 +52,9 @@ class CrossRoadsRooter{
      * CrossRoadsRooter constructor.
      * @param array $root
      */
-    function __construct()
+    function __construct($prod = false)
     {
+        self::$prod = $prod;
         Debug::enable();
         $collector = new RoutesCollector();
         $this->routes = $collector->getRoutes();
@@ -79,7 +82,7 @@ class CrossRoadsRooter{
             $executor->execute();
         }else{
 //            throw new NotFoundException('No route found for the url "'.$this->request.'". Please check your routes!');
-            throw new \Exception('No route found for the url "'.$this->request.'". Please check your routes!');
+            throw new NotFoundException('No route found for the url "'.$this->request.'". Please check your routes!');
         }
     }
 

@@ -9,10 +9,26 @@ namespace framework\core\Forms;
  */
 class FormInput
 {
+    /**
+     * @var string
+     */
     private $name;
+    /**
+     * @var string
+     */
     private $type;
+    /**
+     * @var string
+     */
     private $label;
+    /**
+     * @var array
+     */
     private $options;
+    /**
+     * @var DataTransformer
+     */
+    private $transformer;
 
     private $notAttributes = array(
         'ajax',
@@ -20,12 +36,13 @@ class FormInput
         'static',
     );
 
-    function __construct($name, $type, $label = null, $options = array())
+    function __construct($name, $type, $label = null, $options = array(), DataTransformer $transformer = null)
     {
         $this->name = $name;
         $this->type = $type;
         $this->label = $label;
         $this->options = $options;
+        $this->transformer = $transformer;
     }
 
     /**
@@ -98,6 +115,22 @@ class FormInput
     public function setOptions($options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * @return DataTransformer
+     */
+    public function getTransformer()
+    {
+        return $this->transformer;
+    }
+
+    /**
+     * @param DataTransformer $transformer
+     */
+    public function setTransformer($transformer)
+    {
+        $this->transformer = $transformer;
     }
 
 

@@ -124,7 +124,15 @@ class Form
                 $field = new TextField();
                 $field->setFieldLabel($fieldLabel);
                 $field->setName($n);
-                $field->setValue($this->accessor->getValue($o, $input->getName()));
+                //=====transform data if exist===========================
+                $object = $this->accessor->getValue($o, $input->getName());
+                if($input->getTransformer() != null){
+                    $transformedValue = $input->getTransformer()->in($object);
+                    $field->setValue($transformedValue);
+                }else{
+                    $field->setValue($object);
+                }
+                //=========================================================
                 foreach ($input->getOptions() as $option => $value){
                     if($input->isInputAttribute($option))
                         $field->push($option, $value);
@@ -163,7 +171,8 @@ class Form
                 $field = new DateField();
                 $field->setName($n);
                 $field->setFieldLabel($fieldLabel);
-                $field->setValue($this->accessor->getValue($o, $input->getName()));
+                $object = $this->accessor->getValue($o, $input->getName());
+                $field->setValue($object);
                 foreach ($input->getOptions() as $option => $value){
                     if($input->isInputAttribute($option))
                         $field->push($option, $value);
@@ -540,10 +549,15 @@ class Form
                     }
                 }
 
-            }else if($this->typeOf($key) == '\DateTime'){
+            }else if($this->inputFormType($key)->getType() == 'date'){
                 $date = new \DateTime($value['year'].'-'.$value['month'].'-'.$value['day']);
                 $this->accessor->setValue($this->object, $key, $date);
             }else {///----else if it's a simple type just push it to the object
+                $input = $this->inputFormType($key);
+                $transformer = $input->getTransformer();
+                if($transformer != null){
+                    $value = $transformer->out($value);
+                }
                 $this->accessor->setValue($this->object, $key, $value);
             }
 
