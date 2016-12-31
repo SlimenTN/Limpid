@@ -1,5 +1,9 @@
 <?php
 namespace framework\core\Controller;
+use Doctrine\DBAL\Logging\DebugStack;
+use Doctrine\ORM\EntityManager;
+use framework\core\Exception\NotFoundException;
+use framework\core\Exception\RuntimeException;
 
 /**
  * Class CommandExecutor
@@ -14,31 +18,39 @@ class CommandExecutor
     /**
      * @var string
      */
-    private $pathToCmmand;
+    private $pathToCommand;
 
     /**
      * @var array
      */
     private $parameters;
+
+    /***
+     * @var DebugStack
+     */
+    private $debugStack = null;
+    
+    
     
     function __construct($pathToCommand, $parameters = array())
     {
-        $this->pathToCmmand = $pathToCommand;
+        $this->pathToCommand = $pathToCommand;
         $this->parameters = $parameters;
     }
 
     /**
      * Fetch and execute user's command
      */
-    public function execute(){
-        list($module_controller, $command) = explode(":", $this->pathToCmmand);
+    public function execute(DebugStack $debugStack = null){
+        $this->debugStack = $debugStack;
+        list($module_controller, $command) = explode(":", $this->pathToCommand);
         list($module, $controller) = explode("_", $module_controller);
 
         $class = $this->buildClassName($module, $controller);
 
         $commandName = $this->buildCommandName($command);
 
-        $this->executeCommande($class, $commandName);
+        $this->executeCommand($class, $commandName);
     }
 
     /**
@@ -65,16 +77,32 @@ class CommandExecutor
      * @param $class
      * @param $commandName
      */
-    private function executeCommande($controllerClass, $commandName){
+    private function executeCommand($controllerClass, $commandName){
         $controller = new $controllerClass();
         if($controller instanceof AppController){
             if(method_exists($controller, $commandName)){
+                $this->runDebugStack($controller);
                 call_user_func_array(array($controller, $commandName), $this->parameters);
             }else{
-                throw new \Exception('Error: the command '.$commandName.' is not defined in the controller '.$controllerClass.'!');
+                throw new RuntimeException('Error: the command '.$commandName.' is not defined in the controller '.$controllerClass.'!');
             }
         }else{
             throw new \Exception('Your controller must extends from framework\core\Controller\AppController class');
         }
     }
+    
+    private function runDebugStack(AppController $controller){
+        if($this->debugStack != null) 
+            $controller->getEntityManager()->getConfiguration()->setSQLLogger($this->debugStack);
+    }
+
+    /**
+     * @return DebugStack
+     */
+    public function getDebugStack()
+    {
+        return $this->debugStack;
+    }
+    
+    
 }

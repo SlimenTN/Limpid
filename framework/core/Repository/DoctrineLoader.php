@@ -7,11 +7,9 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\ClassLoader,
     Doctrine\ORM\Configuration,
     Doctrine\ORM\EntityManager,
-    Doctrine\Common\Cache\ArrayCache,
-    Doctrine\DBAL\Logging\EchoSQLLogger;
+    Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\Tools\Setup;
-use framework\config\AppParamters;
+use framework\core\Controller\CrossRoadsRooter;
 
 /**
  * Class DoctrineLoader
@@ -52,7 +50,7 @@ class DoctrineLoader{
         $config->setProxyNamespace('DoctrineORM\Proxies');
 
         // Set up logger
-        $logger = new EchoSQLLogger;
+//        $logger = new EchoSQLLogger;
 //        $config->setSQLLogger($logger);
 
         $config->setAutoGenerateProxyClasses(TRUE);
@@ -60,10 +58,10 @@ class DoctrineLoader{
         // Database connection information
         $connectionOptions = array(
             'driver' => 'pdo_mysql',
-            'user' => AppParamters::DB_USER,
-            'password' => AppParamters::DB_PASSWORD,
-            'host' => AppParamters::DB_HOST,
-            'dbname' => AppParamters::DB_NAME,
+            'user' => CrossRoadsRooter::$SETTINGS['doctrine']['user'],
+            'password' => CrossRoadsRooter::$SETTINGS['doctrine']['password'],
+            'host' => CrossRoadsRooter::$SETTINGS['doctrine']['host'],
+            'dbname' => CrossRoadsRooter::$SETTINGS['doctrine']['database'],
             'charset' => 'UTF8',
         );
 

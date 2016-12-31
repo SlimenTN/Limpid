@@ -23,7 +23,7 @@ class URLParser{
      * @return array|null
      */
     static public function parse($request, ListRoutes $routes){
-        if($request == '/' && AppParamters::TRANSLATOR_ENABLED){
+        if($request == '/' && CrossRoadsRooter::$SETTINGS['translator']['enabled']){
             $url = CrossRoadsRooter::getHote().'/'.CrossRoadsRooter::$LANG.$request;
             header('Location: '.$url);
             exit;
@@ -55,7 +55,7 @@ class URLParser{
      */
     static private function compare(array $arrayRequest, array $arrayPattern){
 
-        if (AppParamters::TRANSLATOR_ENABLED && count($arrayRequest) > 0){
+        if (CrossRoadsRooter::$SETTINGS['translator']['enabled'] && count($arrayRequest) > 0){
             CrossRoadsRooter::$LANG = $arrayRequest[1];
             array_splice($arrayRequest, 1, 1);//---if translator is enabled remove the element of the request that contains lang
         }

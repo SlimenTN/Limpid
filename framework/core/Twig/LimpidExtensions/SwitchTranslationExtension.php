@@ -1,8 +1,7 @@
 <?php
 namespace framework\core\Twig\LimpidExtensions;
 
-
-use framework\config\AppParamters;
+use framework\core\Controller\CrossRoadsRooter;
 use framework\core\Twig\TwigCustomExtension;
 
 /**
@@ -24,7 +23,7 @@ class SwitchTranslationExtension implements TwigCustomExtension
     
     public function switchTranslation($lang){
 
-        if(!AppParamters::TRANSLATOR_ENABLED){
+        if(!CrossRoadsRooter::$SETTINGS['translator']['enabled']){
             throw new \Exception('Translation is disabled in AppParmaeters Class !');
         }
 
