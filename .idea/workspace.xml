@@ -2,11 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0f8cb4aa-7350-4078-816f-87049d2f2947" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/framework/config/settings.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/framework/core/Exception/LimpidException.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/framework/core/Exception/NotFoundException.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/framework/core/Exception/RuntimeException.php" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/framework/config/AppParamters.php" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/gregwar/cache/Gregwar/Cache/.gitignore" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/gregwar/cache/Gregwar/Cache/.travis.yml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/gregwar/cache/Gregwar/Cache/Cache.php" afterPath="" />
@@ -199,12 +194,6 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/phpmailer/phpmailer/test/test_callback.php" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/phpmailer/phpmailer/test/testbootstrap-dist.php" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/vendor/phpmailer/phpmailer/travis.phpunit.xml.dist" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/core/Controller/CommandExecutor.php" afterPath="$PROJECT_DIR$/framework/core/Controller/CommandExecutor.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/core/Controller/CrossRoadsRooter.php" afterPath="$PROJECT_DIR$/framework/core/Controller/CrossRoadsRooter.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/core/Repository/DoctrineLoader.php" afterPath="$PROJECT_DIR$/framework/core/Repository/DoctrineLoader.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/core/Router/URLParser.php" afterPath="$PROJECT_DIR$/framework/core/Router/URLParser.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/framework/core/Twig/LimpidExtensions/SwitchTranslationExtension.php" afterPath="$PROJECT_DIR$/framework/core/Twig/LimpidExtensions/SwitchTranslationExtension.php" />
     </list>
     <ignored path="Limpid.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -226,36 +215,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Form.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/framework/core/Forms/Form.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12376">
-              <caret line="744" column="1" selection-start-line="744" selection-start-column="1" selection-end-line="744" selection-end-column="1" />
-              <folding>
-                <element signature="e#39#82#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="settings.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/framework/config/settings.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="21" column="32" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="LimpidException.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/framework/core/Exception/LimpidException.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
+            <state relative-caret-position="-193">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <element signature="e#44#91#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GlobalContainer.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/framework/core/Controller/GlobalContainer.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="19" column="3" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="3" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -294,6 +271,18 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="app_launcher.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app_launcher.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
+              <folding>
+                <marker date="1482679925907" expanded="true" signature="559:643" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="URLParser.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/framework/core/Router/URLParser.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -314,7 +303,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SwitchTranslationExtension.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SwitchTranslationExtension.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/framework/core/Twig/LimpidExtensions/SwitchTranslationExtension.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-1">
@@ -432,38 +421,6 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="framework" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Limpid" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Limpid" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="framework" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Limpid" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Limpid" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
@@ -547,12 +504,12 @@
       <workItem from="1482679733829" duration="453000" />
       <workItem from="1482783719001" duration="797000" />
       <workItem from="1482949027250" duration="579000" />
-      <workItem from="1483205375491" duration="346000" />
+      <workItem from="1483205375491" duration="584000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25635000" />
+    <option name="totallyTimeSpent" value="25873000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -739,13 +696,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/framework/core/Controller/GlobalContainer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="3" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/framework/core/Forms/Language/French.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -816,16 +766,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app_launcher.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
-          <folding>
-            <marker date="1482679925907" expanded="true" signature="559:643" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/framework/core/Console/Commands/GenerateFormCommand.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2720">
@@ -873,16 +813,6 @@
         <state relative-caret-position="357">
           <caret line="21" column="32" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/framework/core/Exception/LimpidException.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#44#91#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -943,6 +873,34 @@
         <state relative-caret-position="-1">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/framework/core/Exception/LimpidException.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-193">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#44#91#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/framework/core/Controller/GlobalContainer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="19" column="3" selection-start-line="19" selection-start-column="3" selection-end-line="19" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app_launcher.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
+          <folding>
+            <marker date="1482679925907" expanded="true" signature="559:643" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
