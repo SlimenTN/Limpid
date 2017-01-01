@@ -9,13 +9,12 @@ use Doctrine\Common\ClassLoader,
     Doctrine\ORM\EntityManager,
     Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use framework\core\Controller\CrossRoadsRooter;
 
 /**
  * Class DoctrineLoader
  * Init doctrine's service
  * @package framework\core\Repository
- * 
+ *
  * @author Arnaout Slimen <arnaout.slimen@sbc.tn>
  */
 class DoctrineLoader{
@@ -36,8 +35,8 @@ class DoctrineLoader{
         $config = new Configuration;
         $cache = new ArrayCache;
         $config->setMetadataCacheImpl($cache);
-//        $driverImpl = $config->newDefaultAnnotationDriver(array(), false);//make sure to use
         $driverImpl = new AnnotationDriver(new AnnotationReader());
+        
         // registering noop annotation autoloader - allow all annotations by default
         AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driverImpl);
@@ -49,19 +48,16 @@ class DoctrineLoader{
         $config->setProxyDir('data/DoctrineORM/proxies');
         $config->setProxyNamespace('DoctrineORM\Proxies');
 
-        // Set up logger
-//        $logger = new EchoSQLLogger;
-//        $config->setSQLLogger($logger);
-
         $config->setAutoGenerateProxyClasses(TRUE);
 
+        $settings = include __DIR__ . '/../../config/settings.php';
         // Database connection information
         $connectionOptions = array(
             'driver' => 'pdo_mysql',
-            'user' => CrossRoadsRooter::$SETTINGS['doctrine']['user'],
-            'password' => CrossRoadsRooter::$SETTINGS['doctrine']['password'],
-            'host' => CrossRoadsRooter::$SETTINGS['doctrine']['host'],
-            'dbname' => CrossRoadsRooter::$SETTINGS['doctrine']['database'],
+            'user' => $settings['doctrine']['user'],
+            'password' => $settings['doctrine']['password'],
+            'host' => $settings['doctrine']['host'],
+            'dbname' => $settings['doctrine']['database'],
             'charset' => 'UTF8',
         );
 

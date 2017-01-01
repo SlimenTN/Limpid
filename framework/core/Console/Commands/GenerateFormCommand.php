@@ -113,6 +113,16 @@ class GenerateFormCommand extends Command
             return;
         }
 
+        $this->generatePrototype();
+
+        $output->writeln('The FormPrototype has been successfully generated.');
+    }
+
+    /**
+     * Start form generation
+     * @throws \Doctrine\ORM\Mapping\MappingException
+     */
+    public function generatePrototype(){
         $className = 'app\\'.$this->fullModule.'\\'.CrossRoadsRooter::ENTITY.'\\'.$this->entity;
 
         $doc = new DoctrineLoader();
@@ -122,13 +132,6 @@ class GenerateFormCommand extends Command
         $this->reflectionClass = new \ReflectionClass($className);
         $this->fields = $this->reflectionClass->getProperties();
 
-        $this->generatePrototype();
-
-        $output->writeln('The FormPrototype has been successfully generated.');
-    }
-
-
-    private function generatePrototype(){
         $prototypePath = __DIR__.'/../../../../app/'.$this->fullModule.'/'.CrossRoadsRooter::FORM_DIRECTORY.'/'.$this->entity.CrossRoadsRooter::FORM.'.php';
         fopen($prototypePath, 'a');
         $content = $this->buildPrototypeContent();
@@ -166,7 +169,7 @@ class '.$this->entity.CrossRoadsRooter::FORM.' implements FormBuilderInterface
             if($field->name != $this->primaryKey){
                 $f = $this->reflectionClass->getProperty($field->name);
                 $annotations = $reader->getPropertyAnnotations($f);
-
+//                var_dump($annotations);
                 if(isset($annotations[0])){
                     $object = $annotations[0];
                     $type= '';
@@ -199,4 +202,33 @@ class '.$this->entity.CrossRoadsRooter::FORM.' implements FormBuilderInterface
         }
         return $builder;
     }
+
+    /**
+     * @param string $entity
+     */
+    public function setEntity($entity)
+    {
+        $this->entity = $entity;
+        return $this;
+    }
+
+    /**
+     * @param string $module
+     */
+    public function setModule($module)
+    {
+        $this->module = $module;
+        return $this;
+    }
+
+    /**
+     * @param string $fullModule
+     */
+    public function setFullModule($fullModule)
+    {
+        $this->fullModule = $fullModule;
+        return $this;
+    }
+
+
 }

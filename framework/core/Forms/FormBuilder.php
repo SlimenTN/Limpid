@@ -1,6 +1,8 @@
 <?php
 namespace framework\core\Forms;
 
+use framework\core\Controller\GlobalContainer;
+
 
 /**
  * Class FormBuilder
@@ -15,8 +17,14 @@ class FormBuilder
      */
     private $inputs;
 
-    function __construct()
+    /**
+     * @var GlobalContainer
+     */
+    private $controller;
+
+    function __construct(GlobalContainer $controller)
     {
+        $this->controller = $controller;
         $this->inputs = array();
     }
 
@@ -30,8 +38,25 @@ class FormBuilder
      */
     public function addInput($name, $type, $label = null, $options = array(), $transformerClass = null){
         $transformer = ($transformerClass != null) ? new $transformerClass() : null;
-        $this->inputs[] = new FormInput($name, $type, $label, $options, $transformer);
+        $input = new FormInput($name, $type, $label, $options, $transformer);
+        if($type == 'collection'){
+            $input->setSubInputs($this->buildSubInputs($input));
+        }
+        $this->inputs[] = $input;
         return $this;
+    }
+
+    /**
+     * @param FormInput $input
+     * @return array
+     * @throws \Exception
+     */
+    private function buildSubInputs(FormInput $input){
+        $target_entity = $input->getOptions()['target_entity'];
+        $prototypeNamespace = $this->controller->getFormPrototypeNamespcae($target_entity);
+        $form = $this->controller->getFormPrototype($prototypeNamespace);
+        $subInputs = $form->buildFormPrototype(new FormBuilder($this->controller))->getInputs();
+        return $subInputs;
     }
 
     /**

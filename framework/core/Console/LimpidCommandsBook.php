@@ -16,5 +16,6 @@ class LimpidCommandsBook
         'framework\core\Console\Commands\GenerateFormCommand',
         'framework\core\Console\Commands\CreateSchemaCommand',
         'framework\core\Console\Commands\CreateTranslatorCommand',
+        'framework\core\Console\Commands\CRUDGeneratorCommand',
     );
 }

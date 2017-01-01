@@ -30,6 +30,11 @@ class FormInput
      */
     private $transformer;
 
+    /**
+     * @var array
+     */
+    private $subInputs = array();
+
     private $notAttributes = array(
         'ajax',
         'target_entity',
@@ -131,6 +136,23 @@ class FormInput
     public function setTransformer($transformer)
     {
         $this->transformer = $transformer;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubInputs()
+    {
+        return $this->subInputs;
+    }
+
+    /**
+     * @param array $subInputs
+     */
+    public function setSubInputs($subInputs)
+    {
+        $this->subInputs = $subInputs;
+        return $this;
     }
 
 

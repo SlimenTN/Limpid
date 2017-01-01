@@ -21,6 +21,15 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Class Form
+ * This class is responsible of building a html form
+ * from given prototype and object.
+ *
+ * Responsible also of submitting data and fill the object
+ * with form data using Symfony's PropertyAccessor object
+ *
+ * To make it work you must pass the object, Limpid's GlobalContainer and the inputs
+ * as parameters to the constructor
+ *
  * @package framework\core\Forms
  *
  * @author Arnaout Slimen <arnaout.slimen@sbc.tn>
@@ -99,12 +108,8 @@ class Form
     public function decomposeAndBuildForm()
     {
         foreach ($this->inputs as $input) {
-//            $this->formLabels[$input->getName()] = new ;
             $this->formWidgets[$input->getName()] = $this->buildInputElemenet($input);
         }
-
-//        var_dump($this->formWidgets['fiches']);
-
     }
 
     /**
@@ -225,9 +230,9 @@ class Form
             case 'collection':
                 $entities = $this->accessor->getValue($o, $input->getName());
 
-                $prototypeNamespace = $this->container->getFormPrototypeNamespcae($input->getOptions()['target_entity']);
-                $form = $this->container->getFormPrototype($prototypeNamespace);
-                $field = $this->buildCollection($entities, $form, $input->getName());
+//                $prototypeNamespace = $this->container->getFormPrototypeNamespcae($input->getOptions()['target_entity']);
+//                $form = $this->container->getFormPrototype($prototypeNamespace);
+                $field = $this->buildCollection($entities, $input);
 
                 break;
         }
@@ -241,10 +246,11 @@ class Form
      * @param $parentName
      * @return string
      */
-    private function buildCollection($entities,FormBuilderInterface $form, $parentName){
+    private function buildCollection($entities, FormInput $input){
+        $parentName = $input->getName();
         $sw = array();
         $counter = 0;
-        $subInputs = $form->buildFormPrototype(new FormBuilder())->getInputs();
+        $subInputs = $input->getSubInputs();
         foreach ($entities as $entity) {
             $subWidgets = array();
             $hiddenId = new HiddenField();
@@ -291,7 +297,6 @@ class Form
             foreach ($objectCollection as $e){
                 $values[$e->getId()] = $e->__toString();
             }
-//                        var_dump($values);
             $field->setValue($values);
         }else{
             $field = new CheckboxField();
@@ -381,12 +386,11 @@ class Form
      */
     public function getFormHtml()
     {
-//        var_dump($this->formWidgets);
         return $this->generateHtmlFromWidgets($this->formWidgets);
     }
 
     /**
-     * Recursicve function to generate html view from widgets
+     * Recursive function to generate html view from widgets
      * @param array $widgets
      * @return string
      */
@@ -500,11 +504,10 @@ class Form
             } else if ($this->typeOf($key) == 'ArrayCollection') {//---if it's doctrine's ArrayCollection type
                 $collection = $this->accessor->getValue($this->object, $key);
                 $inputForm = $this->inputFormType($key);
-                if($inputForm->getType() == 'collection'){
+                if($inputForm->getType() == 'collection'){//---OneToMany relation
                     $objectsToRemove = $this->collectRemovedObject($collection, $value);
 
                     $counter = 0;
-
                     foreach ($value as $k => $v) {
                         $c = null;
                         if(array_key_exists('id', $v) && $v['id'] != ''){
@@ -519,7 +522,14 @@ class Form
                             $collection->set($counter, $c);//---update or add it
                         }
                         foreach ($v as $sk => $sv) {//---fill entity
-                            $this->accessor->setValue($c, $sk, $sv);
+                            $subObject = $sv;
+                            if ($this->isCustomObject($sk, $c)) {
+                                $subObject = $this->container
+                                    ->getEntityManager()
+                                    ->getRepository($this->getTargetEntity($sk, $inputForm->getSubInputs()))
+                                    ->find($sv);
+                            }
+                            $this->accessor->setValue($c, $sk, $subObject);
                         }
 
                         $counter++;
@@ -530,7 +540,7 @@ class Form
                         $this->container->getEntityManager()->remove($or);
                     }
 
-                }else{
+                }else{//---ManyToMany relation
 
                     $entitiesToRemove = $this->entitiesToRemove($collection, $value);
                     $counter = 0;
@@ -626,7 +636,6 @@ class Form
      * @return FormInput|null
      */
     private function inputFormType($attr){
-//        var_dump($this->inputs);
         foreach ($this->inputs as $input){
             if($input->getName() == $attr) return $input;
         }
@@ -660,11 +669,11 @@ class Form
      * @param $attr
      * @return null
      */
-    private function getTargetEntity($attr)
+    private function getTargetEntity($attr, array $inputs = null)
     {
-//        var_dump($attr);
         $entity = null;
-        foreach ($this->inputs as $input) {
+        $i = ($inputs == null) ? $this->inputs : $inputs;
+        foreach ($i as $input) {
             if ($input->getName() == $attr) {
                 $entityDestination = $input->getOptions()['target_entity'];
                 $entity = $this->container->getEntityNamespace($entityDestination);
@@ -677,13 +686,14 @@ class Form
     }
 
     /**
-     * Get type of attribut
+     * Get type of attribute
      * @param $attr
      * @return null
      */
-    private function typeOf($attr)
+    private function typeOf($attr, $obj = null)
     {
-        $reflect = new \ReflectionClass($this->object);
+        $obj = ($obj == null) ? $this->object : $obj;
+        $reflect = new \ReflectionClass($obj);
         $props = $reflect->getProperties(\ReflectionProperty::IS_PRIVATE);
         foreach ($props as $prop) {
             preg_match_all('#@(.*?)\n#s', $prop->getDocComment(), $annotations);
@@ -702,9 +712,9 @@ class Form
      * @param $class
      * @return bool
      */
-    private function isCustomObject($attr)
+    private function isCustomObject($attr, $obj = null)
     {
-        if (in_array($this->typeOf($attr), self::$DEFINED_TYPES)) {
+        if (in_array($this->typeOf($attr, $obj), self::$DEFINED_TYPES)) {
             return false;
         }
         return true;

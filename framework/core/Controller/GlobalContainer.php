@@ -89,7 +89,7 @@ class GlobalContainer
      * @throws \DI\NotFoundException
      */
     public function getFormBuilder(){
-        return new FormBuilder();
+        return new FormBuilder($this);
     }
 
     /**
