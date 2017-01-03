@@ -2,7 +2,6 @@
 namespace framework\core\Console;
 
 
-use framework\config\ConsoleCommandsBook;
 use Symfony\Component\Console\Application;
 
 /**
@@ -29,7 +28,7 @@ class ConsoleLauncher
      * Load commands book and register commands
      */
     private function collectAndRegisterCommands(){
-        $commands = ConsoleCommandsBook::$COMMANDS;
+        $commands = LimpidCommandsBook::$COMMANDS;
         foreach ($commands as $cmd){
             $this->console->add(new $cmd());
         }

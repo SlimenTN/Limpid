@@ -2,7 +2,6 @@
 
 namespace framework\core\Twig\LimpidExtensions;
 
-use framework\config\AppParamters;
 use framework\core\Controller\CrossRoadsRooter;
 use framework\core\Router\RoutesCollector;
 use framework\core\Twig\TwigCustomExtension;
@@ -44,7 +43,7 @@ class RouteConverterExtension implements TwigCustomExtension
         }
         if ($url == null) throw new \Exception('Exception in ' . __METHOD__ . '(): We can\'t find a declared route with the name "' . $routeName . '" ');
 
-        if (AppParamters::TRANSLATOR_ENABLED) $url = '/' . CrossRoadsRooter::$LANG . $url;
+        if (CrossRoadsRooter::$SETTINGS['translator']['enabled']) $url = '/' . CrossRoadsRooter::$LANG . $url;
 
         $exclude = '/app_launcher.php';
         $hote = str_replace($exclude, '', $_SERVER['PHP_SELF']);

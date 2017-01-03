@@ -18,6 +18,13 @@ class MailerLauncher
     {
         $this->mailer = new \PHPMailer();
         $this->mailer->isSMTP();
+        $this->mailer->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
         $this->mailer->CharSet = 'UTF-8';
         $this->mailer->isHTML(true);
     }
