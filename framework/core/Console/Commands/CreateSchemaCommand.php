@@ -3,7 +3,6 @@ namespace framework\core\Console\Commands;
 
 
 use Doctrine\DBAL\DriverManager;
-use framework\config\AppParamters;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,15 +29,15 @@ class CreateSchemaCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Creating database...');       
-
+        $output->writeln('Creating database...');
+        $settings = include __DIR__ . '/../../../config/settings.php';
         $tmConn = DriverManager::getConnection(array(
             'driver' => 'pdo_mysql',
-            'user' => AppParamters::DB_USER,
-            'password' => AppParamters::DB_PASSWORD,
-            'host' => AppParamters::DB_HOST,
+            'user' => $settings['doctrine']['user'],
+            'password' => $settings['doctrine']['password'],
+            'host' => $settings['doctrine']['host'],
         ));
-        $tmConn->getSchemaManager()->createDatabase(AppParamters::DB_NAME);
+        $tmConn->getSchemaManager()->createDatabase($settings['doctrine']['database']);
         
         $output->writeln('Database has been successfully created.');
     }
