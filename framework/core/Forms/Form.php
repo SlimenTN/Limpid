@@ -16,6 +16,7 @@ use framework\core\Forms\FormElements\Select;
 use framework\core\Forms\FormElements\Textarea;
 use framework\core\Forms\FormElements\TextField;
 use framework\core\Request\HTTPHandler;
+use Symfony\Component\Debug\Exception\UndefinedMethodException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -330,10 +331,18 @@ class Form
         } else if (array_key_exists('target_entity', $input->getOptions())) {
             if(array_key_exists('ajax', $input->getOptions()) && $input->getOptions()['ajax']){
                 $objectCollection = $this->accessor->getValue($object, $input->getName());
-                foreach ($objectCollection as $entity){
+                if($objectCollection instanceof Collection){
+                    foreach ($objectCollection as $entity){
+                        $op = new Option();
+                        $op->setValue($entity->getId());
+                        $op->setLabel($entity->__toString());
+                        $op->push('selected');
+                        $field->addOption($op);
+                    }
+                }else{
                     $op = new Option();
-                    $op->setValue($entity->getId());
-                    $op->setLabel($entity->__toString());
+                    $op->setValue($objectCollection->getId());
+                    $op->setLabel($objectCollection->__toString());
                     $op->push('selected');
                     $field->addOption($op);
                 }

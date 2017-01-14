@@ -10,6 +10,7 @@ use framework\core\Forms\FormBuilderInterface;
 use framework\core\PHPMailer\MailerLauncher;
 use framework\core\Repository\DoctrineLoader;
 use framework\core\Request\HTTPHandler;
+use framework\core\Request\SessionHandler;
 use framework\core\Twig\TwigLauncher;
 
 /**
@@ -34,8 +35,18 @@ class GlobalContainer
 
     function __construct()
     {
+        SessionHandler::initSession();
         $this->container = ContainerBuilder::buildDevContainer();
         $this->twigLauncher = $this->container->get('framework\core\Twig\TwigLauncher');//----Inject TwigLauncher dependency
+
+    }
+
+    /**
+     * @return SessionHandler
+     * @throws \DI\NotFoundException
+     */
+    public function session(){
+        return $this->container->get('framework\core\Request\SessionHandler');
     }
 
     /**

@@ -18,5 +18,6 @@ class LimpidExtensionsBook
         'framework\core\Twig\LimpidExtensions\SwitchTranslationExtension',
         'framework\core\Twig\LimpidExtensions\CurrentRouteExtension',
         'framework\core\Twig\LimpidExtensions\ExecuteCommandExtension',
+        'framework\core\Twig\LimpidExtensions\SessionExtension',
     );
 }
