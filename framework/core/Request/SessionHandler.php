@@ -24,13 +24,13 @@ class SessionHandler
     public function get($index){
         return $_SESSION[$index];
     }
-    
+
     public function remove($index){
-        unset($_SESSION[$index]);
+        if($this->exist($index)) unset($_SESSION[$index]);
     }
-    
+
     public function clean($index){
-        $_SESSION[$index] = null;
+        if($this->exist($index)) $_SESSION[$index] = null;
     }
     
     public function destroy(){
