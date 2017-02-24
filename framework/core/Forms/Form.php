@@ -12,6 +12,7 @@ use framework\core\Forms\FormElements\MulticheckboxField;
 use framework\core\Forms\FormElements\MultiradioField;
 use framework\core\Forms\FormElements\NumberField;
 use framework\core\Forms\FormElements\Option;
+use framework\core\Forms\FormElements\PasswordField;
 use framework\core\Forms\FormElements\Select;
 use framework\core\Forms\FormElements\Textarea;
 use framework\core\Forms\FormElements\TextField;
@@ -138,6 +139,16 @@ class Form
                 }else{
                     $field->setValue($object);
                 }
+                //=========================================================
+                foreach ($input->getOptions() as $option => $value){
+                    if($input->isInputAttribute($option))
+                        $field->push($option, $value);
+                }
+                break;
+            case 'password':
+                $field = new PasswordField();
+                $field->setFieldLabel($fieldLabel);
+                $field->setName($n);
                 //=========================================================
                 foreach ($input->getOptions() as $option => $value){
                     if($input->isInputAttribute($option))

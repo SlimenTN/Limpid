@@ -64,7 +64,8 @@ class GenerateFormCommand extends Command
         'date' => 'date',
         'manytomany' => 'select',
         'onetomany' => 'collection',
-        'manytoone' => 'select'
+        'manytoone' => 'select',
+        'float' => 'numeric',
     );
 
     protected function configure()
