@@ -31,19 +31,19 @@ class ControlBridge implements TwigCustomExtension
      * @return mixed
      */
     public function renderControl($form, $input, $attributes =  array()){
-//        var_dump($form[$input]);
         $field = null;
         if($form instanceof Form){
             $field = $form->getFieldbyName($input);
-            if(count($attributes) > 0){
-                foreach ($attributes as $key => $value){
-                    $field->setAttribute($key, $value);
-                }
-            }
         }else if(is_array($form)){
             $field = $form[$input];
         }
-        
+
+        if(!empty($attributes)){
+            foreach ($attributes as $key => $value){
+                $field->setAttribute($key, $value);
+            }
+        }
+
         echo $field->getHtml();
     }
     
