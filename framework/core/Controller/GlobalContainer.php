@@ -58,6 +58,18 @@ class GlobalContainer
     }
 
     /**
+     * Call service from settings.php file
+     * @param $service
+     * @return object called service class
+     * @throws \DI\NotFoundException
+     */
+    public function call($service){
+        $settings = include __DIR__ . '/../../config/settings.php';
+        $serviceClass = $settings['services'][$service];
+        return $this->container->get($serviceClass['class']);
+    }
+
+    /**
      * Inject repository of given entity
      * @param string $entityName String contains module's name and entity ex: 'HelloWorld:Entity'
      * @return EntityRepository
@@ -168,15 +180,5 @@ class GlobalContainer
     public function redirectToRoute($routeName, $params = array()){
         CrossRoadsRooter::redirectToRoute($routeName, $params);
     }
-
-    /**
-     * Whenever this function is called the route will be secured
-     * if no user is logged visitor will be redirected to login route
-     *
-     * @param string $loginRoute
-     */
-    public function secureCommand($loginRoute){
-        session_start();
-        if(!isset($_SESSION['user'])) $this->redirectToRoute($loginRoute);
-    }
+    
 }

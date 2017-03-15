@@ -117,7 +117,7 @@ class CrossRoadsRooter
         Debug::enable();
         $this->sqlStack = new DebugStack();
     }
-    
+
     /**
      * Terminate script execution
      * and display logs barre
@@ -135,7 +135,8 @@ class CrossRoadsRooter
                         background: #297157; 
                         color: #fff;
                         position: fixed;
-                        bottom: 0;">';
+                        bottom: 0;
+                        z-index: 1000000;">';
             $logBarre .= '<div style="width: 210px;
                         float: left;
                         padding: 5px;
