@@ -110,7 +110,7 @@ class Form
     public function decomposeAndBuildForm()
     {
         foreach ($this->inputs as $input) {
-            $this->formWidgets[$input->getName()] = $this->buildInputElemenet($input);
+            $this->formWidgets[$input->getName()] = $this->buildInputElement($input);
         }
     }
 
@@ -118,10 +118,11 @@ class Form
      * @param FormInput $input
      * @return Field
      */
-    private function buildInputElemenet(FormInput $input, $subObject = null, $subFieldName = null)
+    private function buildInputElement(FormInput $input, $subObject = null, $subFieldName = null, $idSubField = null)
     {
         $o = ($subObject == null) ? $this->object : $subObject;
         $n = ($subFieldName == null) ? $input->getName() : $subFieldName;
+        $id = ($idSubField == null) ? $n : $idSubField;
 
         $field = null;
         $fieldLabel = ($input->getLabel() == null) ? ucfirst($n) : $input->getLabel();
@@ -249,6 +250,8 @@ class Form
                 break;
         }
 
+        if($field instanceof Field) $field->setAttribute('id', $id);
+
         return $field;
     }
 
@@ -274,7 +277,8 @@ class Form
             foreach ($subInputs as $si) {
                 $nameSubField = $si->getName();
                 $name = $parentName . '[' . $counter . '][' . $nameSubField . ']';
-                $subWidgets[$nameSubField] = $this->buildInputElemenet($si, $entity, $name);
+                $id = $nameSubField.'_'.$counter;
+                $subWidgets[$nameSubField] = $this->buildInputElement($si, $entity, $name, $id);
 
             }
             $sw[] = $subWidgets;
