@@ -87,6 +87,11 @@ class Form
     private $inputs;
 
     /**
+     * @var array
+     */
+    private $data;
+
+    /**
      * Form constructor.
      * @param $object
      * @param GlobalContainer $container
@@ -242,9 +247,6 @@ class Form
                 break;
             case 'collection':
                 $entities = $this->accessor->getValue($o, $input->getName());
-
-//                $prototypeNamespace = $this->container->getFormPrototypeNamespcae($input->getOptions()['target_entity']);
-//                $form = $this->container->getFormPrototype($prototypeNamespace);
                 $field = $this->buildCollection($entities, $input);
 
                 break;
@@ -491,7 +493,8 @@ class Form
         $res = $this->container->getHttpHandler()->get(HTTPHandler::POST);
 
         if(!empty($res)){
-            $this->handleRequest($res);
+            $this->data = $res;
+            $this->handleRequest($this->data);
             return true;
         }else{
             return false;
@@ -521,80 +524,93 @@ class Form
     private function handleRequest(array $data){
         $this->handlerUnsentAttributes($data);
         foreach ($data as $key => $value) {
-            if ($this->isCustomObject($key)) {//----if it's custom object create instance of it
-                $entity = $this->container->getEntityManager()->getRepository($this->getTargetEntity($key))->find($value);
-                $this->accessor->setValue($this->object, $key, $entity);
 
-            } else if ($this->typeOf($key) == 'ArrayCollection') {//---if it's doctrine's ArrayCollection type
-                $collection = $this->accessor->getValue($this->object, $key);
-                $inputForm = $this->inputFormType($key);
-                if($inputForm->getType() == 'collection'){//---OneToMany relation
-                    $objectsToRemove = $this->collectRemovedObject($collection, $value);
-
-                    $counter = 0;
-                    foreach ($value as $k => $v) {
-                        $c = null;
-                        if(array_key_exists('id', $v) && $v['id'] != ''){
-                            foreach ($collection as $en){
-                                if($v['id'] == $en->getId()){
-                                    $c = $en;
-                                }
-                            }
-                        }else{
-                            $class = $this->getTargetEntity($key);
-                            $c = new $class();
-                            $collection->set($counter, $c);//---update or add it
-                        }
-                        foreach ($v as $sk => $sv) {//---fill entity
-                            $subObject = $sv;
-                            if ($this->isCustomObject($sk, $c)) {
-                                $subObject = $this->container
-                                    ->getEntityManager()
-                                    ->getRepository($this->getTargetEntity($sk, $inputForm->getSubInputs()))
-                                    ->find($sv);
-                            }
-                            $this->accessor->setValue($c, $sk, $subObject);
-                        }
-
-                        $counter++;
-                    }
-
-                    foreach ($objectsToRemove as $or){
-                        $collection->removeElement($or);
-                        $this->container->getEntityManager()->remove($or);
-                    }
-
-                }else{//---ManyToMany relation
-
-                    $entitiesToRemove = $this->entitiesToRemove($collection, $value);
-                    $counter = 0;
-                    foreach ($value as $id){
-                        $entity = $this->getEntityById($collection, $id);
-                        if($entity == null){
-                            $namespace = $this->container->getEntityNamespace($inputForm->getOptions()['target_entity']);
-                            $entity = $this->container->getEntityManager()->getRepository($namespace)->find($id);
-                            $collection->set($counter, $entity);
-                        }
-                        $counter++;
-                    }
-
-                    foreach ($entitiesToRemove as $e){
-                        $collection->removeElement($e);
-                    }
-                }
-
-            }else if($this->inputFormType($key)->getType() == 'date'){
-                $date = new \DateTime($value['year'].'-'.$value['month'].'-'.$value['day']);
-                $this->accessor->setValue($this->object, $key, $date);
-            }else {///----else if it's a simple type just push it to the object
-                $input = $this->inputFormType($key);
-                $transformer = $input->getTransformer();
-                if($transformer != null){
-                    $value = $transformer->out($value);
-                }
-                $this->accessor->setValue($this->object, $key, $value);
+            if($this->existInEntity($key)){
+                $this->pushToObject($key, $value);
             }
 
+        }
+    }
+
+    /**
+     * Push attribute to the object
+     * @param $key
+     * @param $value
+     * @throws \Exception
+     */
+    private function pushToObject($key, $value){
+        if ($this->isCustomObject($key)) {//----if it's custom object create instance of it
+            $entity = $this->container->getEntityManager()->getRepository($this->getTargetEntity($key))->find($value);
+            $this->accessor->setValue($this->object, $key, $entity);
+
+        } else if ($this->typeOf($key) == 'ArrayCollection') {//---if it's doctrine's ArrayCollection type
+            $collection = $this->accessor->getValue($this->object, $key);
+            $inputForm = $this->inputFormType($key);
+            if($inputForm->getType() == 'collection'){//---OneToMany relation
+                $objectsToRemove = $this->collectRemovedObject($collection, $value);
+
+                $counter = 0;
+                foreach ($value as $k => $v) {
+                    $c = null;
+                    if(array_key_exists('id', $v) && $v['id'] != ''){
+                        foreach ($collection as $en){
+                            if($v['id'] == $en->getId()){
+                                $c = $en;
+                            }
+                        }
+                    }else{
+                        $class = $this->getTargetEntity($key);
+                        $c = new $class();
+                        $collection->set($counter, $c);//---update or add it
+                    }
+                    foreach ($v as $sk => $sv) {//---fill entity
+                        $subObject = $sv;
+                        if ($this->isCustomObject($sk, $c)) {
+                            $subObject = $this->container
+                                ->getEntityManager()
+                                ->getRepository($this->getTargetEntity($sk, $inputForm->getSubInputs()))
+                                ->find($sv);
+                        }
+                        $this->accessor->setValue($c, $sk, $subObject);
+                    }
+
+                    $counter++;
+                }
+
+                foreach ($objectsToRemove as $or){
+                    $collection->removeElement($or);
+                    $this->container->getEntityManager()->remove($or);
+                }
+
+            }else{//---ManyToMany relation
+
+                $entitiesToRemove = $this->entitiesToRemove($collection, $value);
+                $counter = 0;
+                foreach ($value as $id){
+                    $entity = $this->getEntityById($collection, $id);
+                    if($entity == null){
+                        $namespace = $this->container->getEntityNamespace($inputForm->getOptions()['target_entity']);
+                        $entity = $this->container->getEntityManager()->getRepository($namespace)->find($id);
+                        $collection->set($counter, $entity);
+                    }
+                    $counter++;
+                }
+
+                foreach ($entitiesToRemove as $e){
+                    $collection->removeElement($e);
+                }
+            }
+
+        }else if($this->inputFormType($key)->getType() == 'date'){
+            $date = new \DateTime($value['year'].'-'.$value['month'].'-'.$value['day']);
+            $this->accessor->setValue($this->object, $key, $date);
+        }else {///----else if it's a simple type just push it to the object
+            $input = $this->inputFormType($key);
+            $transformer = $input->getTransformer();
+            if($transformer != null){
+                $value = $transformer->out($value);
+            }
+            $this->accessor->setValue($this->object, $key, $value);
         }
     }
 
@@ -710,6 +726,24 @@ class Form
     }
 
     /**
+     * Check if attribute exist in the entity
+     * @param $attr
+     * @param null $obj
+     * @return bool
+     */
+    public function existInEntity($attr, $obj = null){
+        $obj = ($obj == null) ? $this->object : $obj;
+        $reflect = new \ReflectionClass($obj);
+        $props = $reflect->getProperties();
+        foreach ($props as $prop) {
+            if ($prop->getName() === $attr) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Get type of attribute
      * @param $attr
      * @return null
@@ -776,4 +810,22 @@ class Form
 
         throw new \Exception('Unknown field "'.$name.'"');
     }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
+
 }

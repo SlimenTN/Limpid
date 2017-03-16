@@ -47,6 +47,18 @@ class FormBuilder
     }
 
     /**
+     * Remove input from FormBuilder
+     * @param $name
+     */
+    public function removeInput($name){
+        foreach ($this->inputs as $key => $input){
+            if($input instanceof FormInput){
+                if($input->getName() == $name) unset($this->inputs[$key]);
+            }
+        }
+    }
+
+    /**
      * @param FormInput $input
      * @return array
      * @throws \Exception
