@@ -11,6 +11,7 @@ class LimpidExtensionsBook
         'framework\core\Twig\LimpidExtensions\RouteConverterExtension',
         'framework\core\Twig\LimpidExtensions\AssetsExtension',
         'framework\core\Twig\LimpidExtensions\FormToTwigBridge\ControlBridge',
+        'framework\core\Twig\LimpidExtensions\FormToTwigBridge\LabelBridge',
         'framework\core\Twig\LimpidExtensions\FormToTwigBridge\LaunchFormBridge',
         'framework\core\Twig\LimpidExtensions\FormToTwigBridge\CloseFormBridge',
         'framework\core\Twig\LimpidExtensions\FormToTwigBridge\DisplayFormBridge',
