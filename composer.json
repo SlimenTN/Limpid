@@ -14,7 +14,7 @@
         "twig/twig": "^1.26",
         "doctrine/orm": "^2.5",
         "php-di/php-di": "^5.4",
-        "phpmailer/phpmailer": "^5.2.27,
+        "phpmailer/phpmailer": "^5.2.27",
         "symfony/property-access": "^3.2"
     },
     "autoload": {
